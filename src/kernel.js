@@ -118,7 +118,7 @@ function __emptyFalse(a) {
     horisontalToolbox() {
       this.delim = document.getElementById(this.uid+'---delim');
       const context = this;
-      this.delim.addEventListener('click', ()=>{
+      this.delim?.addEventListener('click', ()=>{
         context.addCellAfterAny(context.uid)
       });
     }
