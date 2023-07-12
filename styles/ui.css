@@ -978,7 +978,8 @@ code, pre, .cm-editor .cm-scroller {
 }
 
 .tool-div {
-  display: flex
+  display: flex;
+  margin-bottom: 2px;
 }
 
 .btn {
