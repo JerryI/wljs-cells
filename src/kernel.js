@@ -141,7 +141,7 @@ function __emptyFalse(a) {
         addCellAfter(uid, self);
       });
 
-      play.addEventListener("click", function (e) {
+      play?.addEventListener("click", function (e) {
         evaluate();
       });
   
