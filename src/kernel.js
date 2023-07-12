@@ -64,19 +64,42 @@ function __emptyFalse(a) {
       console.log('morph');
   
       const cell   = document.getElementById(`${this.uid}---output`);
+      document.getElementById(`${this.uid}---delim`).remove();
       //make it different id, so it will not conflict
       cell.id = cell.id + '--old';
       const editor = cell.firstChild; 
     
-      const parentcellwrapper = cell.parentNode.parentNode;
+      const parentcellwrapper = cell.parentNode.parentNode.parentNode;
     
       parentcellwrapper.insertAdjacentHTML('afterend', template);
       this.element = document.getElementById(`${this.uid}---input`);
+
+      const newWrapper = this.element.parentNode;
   
       this.element.appendChild(editor);
-      cell.remove();
+      cell.parentNode.remove();
   
       this.toolbox();
+      this.horisontalToolbox();
+
+      //move the rest of children
+      const pos = CellList[this.sign].indexOf(this.uid);
+      let lastOne = pos + 1;
+      if (pos + 1 < CellList[this.sign].length) {
+        if (CellHash.get(CellList[this.sign][pos + 1]).type === 'input') return;
+
+        while(true) {
+          if (lastOne === CellList[this.sign].length) break;
+          if (CellHash.get(CellList[this.sign][lastOne]).type === 'input') break;
+          lastOne++;
+        }
+
+        for (let i=pos+1; i<lastOne; ++i) {
+          console.log('fetching the prev.. child: '+CellList[this.sign][i]);
+          const child = document.getElementById(`${CellList[this.sign][i]}---output`).parentNode;
+          newWrapper.appendChild(child);
+        }
+      }
     }
   
   
@@ -90,6 +113,14 @@ function __emptyFalse(a) {
           loader.classList.remove('loader-line-pending');
       
       this.state = state;
+    }
+
+    horisontalToolbox() {
+      this.delim = document.getElementById(this.uid+'---delim');
+      const context = this;
+      this.delim.addEventListener('click', ()=>{
+        context.addCellAfterAny(context.uid)
+      });
     }
   
     toolbox() {
@@ -134,6 +165,13 @@ function __emptyFalse(a) {
   
       server.socket.send(q);  
     }
+
+    addCellAfterAny(uid) {  
+      const id = uid || this.uid;
+      var q = 'NotebookOperate["'+id+'", CellListAddNewAfterAny]';
+  
+      server.socket.send(q);  
+    }    
     
     constructor(template, input) {
       this.uid = input["id"];
@@ -158,7 +196,7 @@ function __emptyFalse(a) {
   
         if (beforeType === 'output' && currentType === 'input') {
           console.log("input cell after outputcell");
-          document.getElementById(input["after"]["id"]+"---output").parentNode.parentNode.insertAdjacentHTML('afterend', template);
+          document.getElementById(input["after"]["id"]+"---output").parentNode.parentNode.parentNode.insertAdjacentHTML('afterend', template);
         }
         
         if (beforeType === 'input' && currentType === 'output') {
@@ -168,7 +206,7 @@ function __emptyFalse(a) {
         
         if (beforeType === 'output' && currentType === 'output') {
           console.log("output cell after outputcell");
-          document.getElementById(input["after"]["id"]+"---output").insertAdjacentHTML('afterend', template);
+          document.getElementById(input["after"]["id"]+"---output").parentNode.insertAdjacentHTML('afterend', template);
         }     
         
         CellList[this.sign].splice(pos+1, 0, input["id"]);
@@ -185,7 +223,7 @@ function __emptyFalse(a) {
             document.getElementById(prev.uid).insertAdjacentHTML('beforeend', template);
           } else {
             //find the parent's holder and inject into the end
-            document.getElementById(prev.uid+"---output").parentNode.insertAdjacentHTML('beforeend', template);
+            document.getElementById(prev.uid+"---output").parentNode.parentNode.insertAdjacentHTML('beforeend', template);
           }
           
         } else {
@@ -199,6 +237,7 @@ function __emptyFalse(a) {
   
       this.element = document.getElementById(this.uid+"---"+this.type);
       if (this.type === 'input') this.toolbox();
+      this.horisontalToolbox();
   
       this.display = new window.SupportedCells[input["display"]].view(this, input["data"]);    
       
@@ -221,7 +260,7 @@ function __emptyFalse(a) {
       if (this.type === 'input') {
         document.getElementById(this.uid).parentNode.remove();
       } else {
-        document.getElementById(`${this.uid}---${this.type}`)?.remove();
+        document.getElementById(`${this.uid}---${this.type}`)?.parentNode.remove();
       }    
     }
     

@@ -917,6 +917,8 @@ code, pre, .cm-editor .cm-scroller {
   /*line-height: 1.5em  */
 }
 
+
+
 .placeholder-text {
   color: inherit;
   font-size: inherit;
@@ -960,7 +962,6 @@ code, pre, .cm-editor .cm-scroller {
   letter-spacing: -.003em;
   line-height: 30px;
   margin-bottom: -.46em;
-  margin-top: .86em;
   position: relative
 }
 
@@ -1626,4 +1627,12 @@ table {
   right: 0;
   /*! display: block; */
   position: absolute;
+}
+
+.cell-wrapper.frontend-node hr{
+  height: 0.66em;
+  padding: 0;
+  margin: 0;
+  cursor: vertical-text;
+  border: 0;
 }
