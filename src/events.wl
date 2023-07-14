@@ -6,6 +6,8 @@ WLJSCellsPopupFire::usage = "fires popups"
 
 Begin["Private`"]
 
+$ContextAliases["jsfn`"] = "JerryI`WolframJSFrontend`Notebook`";
+
 DefaultSerializer = ExportByteArray[#, "ExpressionJSON"]&
 Public = ParentDirectory[$InputFileName//DirectoryName]
 
@@ -147,6 +149,9 @@ WLJSCellsFire[channel_]["Print"][text_] := Module[{template},
     ];
     Print[Green<>"Print"];
     Print[Reset];
+    Print["params"];
+    Print[channel];
+    Print[text];
     WebSocketSend[jsfn`Notebooks[channel]["channel"],  Global`FrontEndPopUp[template, text//ToString]];
 ];
 
