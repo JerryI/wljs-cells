@@ -289,7 +289,7 @@
     const name = await interpretate(args[0], env);
     console.warn('restoring symbol: '+name);
     interpretate.packedSymbols[name] = args[1];
-    server.trackedSymbols[name] = True;
+    server.trackedSymbols[name] = true;
   };
   
   core.FrontEndAssignKernelSocket = async (args, env) => {
