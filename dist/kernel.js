@@ -284,6 +284,12 @@
       server.socket.send(q);    
     }
   }
+
+  core.FrontEndRestoreSymbol = async (args, env) => {
+    const name = await interpretate(args[0], env);
+    console.warn('restoring symbol: '+name);
+    interpretate.packedSymbols[name] = args[1];
+  };
   
   core.FrontEndAssignKernelSocket = async (args, env) => {
     const port = await interpretate(args[0], env);
@@ -291,7 +297,15 @@
       console.log('trying to connect...');
       server.kernel.socket = new WebSocket("ws://"+window.location.hostname+':'+port);
       server.kernel.socket.onopen = function(e) {
-        console.log("[open] Соединение установлено c Kernel");
+        console.warn("[open] Соединение установлено c Kernel");
+
+        console.warn('add tracking for all symbols...');
+
+        Object.keys(server.trackedSymbols).forEach((s)=>{
+          console.log('added for '+s);
+          server.addTracker(s);
+        });
+
         server.kernel.socket.send('WSSocketEstablish');
       }; 
   
@@ -304,8 +318,8 @@
       };
       
       server.kernel.socket.onclose = function(event) {
-        console.log("WS connection to kernel server is lost");
-        console.log(event);
+        console.error("WS connection to kernel server is lost");
+        console.error(event);
         //alert('Connection lost. Please, update the page to see new changes.');
       };
   
