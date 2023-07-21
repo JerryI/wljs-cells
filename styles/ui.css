@@ -1010,6 +1010,10 @@ code, pre, .cm-editor .cm-scroller {
   background-color: #dbdada
 }
 
+.sidebar-file-drop-enter {
+  width: 400px;
+}
+
 
 .tool-wrapper {
   display: flex;
@@ -1594,15 +1598,6 @@ table {
   color: rgba(55, 53, 47, 0.5);
 }
 
-.cell-type-htm {
-  background-color: hsl(137, 100%, 87%);
-  color: rgba(55, 53, 47, 0.5);
-}
-
-.cell-type-wsp {
-  background-color: hsl(137, 100%, 87%);
-  color: rgba(55, 53, 47, 0.5);
-}
 
 .cell-type-svgbob {
   background-color: hsl(238, 100%, 87%);
