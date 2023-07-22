@@ -6791,7 +6791,9 @@ Inflate$1.prototype.onEnd = function (status) {
       const toolbox = body.getElementsByClassName('frontend-tools');
       const hide    = body.getElementsByClassName('node-settings-hide')[0];
       const play    = body.getElementsByClassName('node-settings-play')[0];
-      const removeoutput    = body.getElementsByClassName('node-settings-removeoutput')[0];
+      let removeoutput    = body.getElementsByClassName('node-settings-removeoutput');
+      if (removeoutput.lenth > 0) removeoutput = removeoutput[0];
+
       const addafter   = body.getElementsByClassName('node-settings-add')[0];
       body.onmouseout  =  function(ev) {Array.from(toolbox).forEach((e)=>e.classList.remove("tools-show"));};
       body.onmouseover =  function(ev) {Array.from(toolbox).forEach((e)=>e.classList.add("tools-show"));}; 
@@ -6801,7 +6803,7 @@ Inflate$1.prototype.onEnd = function (status) {
       const uid = this.uid;
       const self = this;
 
-      removeoutput.addEventListener("click", function (e) {
+      removeoutput?.addEventListener("click", function (e) {
         removeOutput(uid, self);
       });
   
@@ -7075,7 +7077,7 @@ Inflate$1.prototype.onEnd = function (status) {
     core.PreviewCell(env.element, window.atob(args));
   };
 
-  window.fileCompressor = readFile;
+  
 
 
   function readFile(file, transport, status=console.log) {
@@ -7158,4 +7160,6 @@ Inflate$1.prototype.onEnd = function (status) {
         }
         
         return base64
-      }
+      }  
+
+      window.fileCompressor = readFile;

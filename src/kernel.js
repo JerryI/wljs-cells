@@ -132,7 +132,9 @@ function __emptyFalse(a) {
       const toolbox = body.getElementsByClassName('frontend-tools');
       const hide    = body.getElementsByClassName('node-settings-hide')[0];
       const play    = body.getElementsByClassName('node-settings-play')[0];
-      const removeoutput    = body.getElementsByClassName('node-settings-removeoutput')[0];
+      let removeoutput    = body.getElementsByClassName('node-settings-removeoutput');
+      if (removeoutput.lenth > 0) removeoutput = removeoutput[0];
+
       const addafter   = body.getElementsByClassName('node-settings-add')[0];
       body.onmouseout  =  function(ev) {Array.from(toolbox).forEach((e)=>e.classList.remove("tools-show"))};
       body.onmouseover =  function(ev) {Array.from(toolbox).forEach((e)=>e.classList.add("tools-show"))}; 
@@ -142,7 +144,7 @@ function __emptyFalse(a) {
       const uid = this.uid;
       const self = this;
 
-      removeoutput.addEventListener("click", function (e) {
+      removeoutput?.addEventListener("click", function (e) {
         removeOutput(uid, self);
       });
   
