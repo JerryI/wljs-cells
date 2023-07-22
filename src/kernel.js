@@ -144,7 +144,7 @@ function __emptyFalse(a) {
       const uid = this.uid;
       const self = this;
 
-      if (removeoutput.lenth > 0) {
+      if (removeoutput.length > 0) {
         removeoutput[0].addEventListener("click", function (e) {
           removeOutput(uid, self);
         });
