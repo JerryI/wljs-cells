@@ -420,6 +420,11 @@ function __emptyFalse(a) {
     core.PreviewCell(env.element, window.atob(args));
   }
 
+  core.FrontEndSetTimerForGarbageSymbols = async (args, env) => {
+    const time = await interpretate(args[0], env);
+    setTimeout(interpretate.garbageCollect(), time);
+  }
+
   
 
 
