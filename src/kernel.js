@@ -422,7 +422,8 @@ function __emptyFalse(a) {
 
   core.FrontEndSetTimerForGarbageSymbols = async (args, env) => {
     const time = await interpretate(args[0], env);
-    setTimeout(interpretate.garbageCollect(), time);
+    if (interpretate.garbageCollect)
+      setTimeout(interpretate.garbageCollect, time);
   }
 
   
