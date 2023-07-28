@@ -360,6 +360,8 @@
     transition: all ease-in-out 0.3s;
 }
 
+
+
 .notion-sidebar-container-hide {
 	width: 0px;
 }
@@ -844,6 +846,26 @@
 	margin-left: 246px;
     width: calc(100vw - 250px);
 	transition: all ease-in-out 0.3s;
+}
+
+@media screen and (width < 1200px) {
+  .notion-frame {
+    width: 100vw;
+    margin: 0;
+  }
+  .topbar-url-container{
+    margin: 0 !important;
+    display: none;
+  }
+  .styles-container-editor .frontend-paragraph {
+    font-size: 0.8em !important;
+  }
+  .p {
+    font-size: 2em !important;
+  }
+  .notion-focusable > div {
+    font-size: 2em !important;
+  }
 }
 
 .notion-frame-extended {
@@ -1632,4 +1654,120 @@ table {
   margin: 0;
   cursor: vertical-text;
   border: 0;
+}
+
+@media screen and (width < 1200px) {
+  p {
+    font-size: 2.8em !important;
+  }
+
+  .tool-div {
+    scale: 2;
+    top: 100%;
+    margin-top: -38px;
+  }
+
+  .notion-topbar {
+    padding: 2em;
+    padding-left: 4em;
+    padding-right: 4em;
+  }
+
+  .notion-topbar > div {
+    justify-content: center;
+    scale: 2;
+    overflow: visible;
+}  
+
+  .styles-container-editor {
+    padding: 2em;
+    padding-top:6em;
+    padding-bottom:2em;
+  }
+
+  .cell-wrapper {
+    padding: 0 6em;
+  }
+
+  .dropdown-kernel-show {
+    transform: translateX(-52%);
+    scale: 0.5;
+  }
+
+  .notion-focusable .button-label {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+
+  .notion-focusable .button-label2 {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+
+}
+
+@media screen and (width < 1200px) {
+
+  .sidebar-option .option-holder {
+    scale: 2;
+  }
+
+  .notion-record-icon.notranslate.notion-focusable {
+    scale: 2;
+  }
+
+  .sidebar-label-clearfix {
+    padding-left: 0.5em;
+  }
+  .notion-focusable .button-body {
+    scale: 2;
+    padding-left: 0.5em;
+  }
+
+  .sidebar-button-label {
+    padding-left: 1em;
+  }
+  .sidebar-button-svg {
+    scale:2;
+    padding-left: 0.5em;
+  }
+
+  .notion-close-sidebar.notion-focusable {
+    scale:2;
+  }
+
+  .sidebar-flex .sidebar-holder {
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  .notion-topbar-share-menu.notion-focusable {
+    display: none;
+  }
+
+  .cm-editor {
+    font-size: 2em;
+  }
+
+  .cell-type-widget {
+    font-size: 1em !important;
+    height: 1.2em !important;
+  }
+
+  .styles-container-editor .frontend-paragraph {
+    line-height: 6em;
+  }
+
+  .notion-sidebar-container {
+    width: 50vw;
+    padding-right: 2em;
+  }
+
+  .notion-sidebar-container-hide {
+    width: 0px;
+  }
+
+  .fraction {
+    font-size: 0.5em;
+  }
 }
