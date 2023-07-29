@@ -848,7 +848,8 @@
 	transition: all ease-in-out 0.3s;
 }
 
-@media screen and (width < 1200px) {
+@media only screen 
+    and (max-device-width : 500px) {
   .notion-frame {
     width: 100vw;
     margin: 0;
@@ -1656,7 +1657,8 @@ table {
   border: 0;
 }
 
-@media screen and (width < 1200px) {
+@media only screen 
+    and (max-device-width : 500px) {
   p {
     font-size: 2.8em !important;
   }
@@ -1706,7 +1708,8 @@ table {
 
 }
 
-@media screen and (width < 1200px) {
+@media only screen 
+    and (max-device-width : 500px) {
 
   .sidebar-option .option-holder {
     scale: 2;
