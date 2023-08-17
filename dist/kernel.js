@@ -6765,8 +6765,15 @@ Inflate$1.prototype.onEnd = function (status) {
   
   
     updateState(state) {
-      const loader = document.getElementById(this.uid+"---"+this.type).parentNode.getElementsByClassName('loader-line')[0];
-  
+      console.log(this.uid);
+      const el = document.getElementById(this.uid);
+      if (!el) {
+        console.warn(this.uid+' does not exist anymore... Probably it was purged in a wrong way');
+        return;
+      }
+      const loader = document.getElementById(this.uid).getElementsByClassName('loader-line')[0];
+      console.log(loader);
+
       console.log(state);
         if (state === 'pending')
           loader.classList.add('loader-line-pending');
@@ -7055,7 +7062,7 @@ Inflate$1.prototype.onEnd = function (status) {
   core.FrontEndGlobalAbort = function (args, env) {
     const arr = Object.keys(CellHashStorage);
     arr.forEach((el)=>{
-      CellHash.get(el).updateState('idle');
+      CellHash.get(el)?.updateState('idle');
     });
   };
   
