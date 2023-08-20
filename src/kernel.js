@@ -140,12 +140,14 @@ function __emptyFalse(a) {
       const hide    = body.getElementsByClassName('node-settings-hide')[0];
       const play    = body.getElementsByClassName('node-settings-play')[0];
       let removeoutput    = body.getElementsByClassName('node-settings-removeoutput');
+      let initgrouptoggle    = body.getElementsByClassName('node-settings-initgroup');
       
 
       const addafter   = body.getElementsByClassName('node-settings-add')[0];
       body.onmouseout  =  function(ev) {Array.from(toolbox).forEach((e)=>e.classList.remove("tools-show"))};
       body.onmouseover =  function(ev) {Array.from(toolbox).forEach((e)=>e.classList.add("tools-show"))}; 
       const removeOutput = this.removeOutput;
+      const toggleInit = this.toggleInit;
       const addCellAfter = this.addCellAfter;
       const evaluate = () => this.eval(this.display.editor.state.doc.toString());
       const uid = this.uid;
@@ -155,6 +157,13 @@ function __emptyFalse(a) {
         removeoutput[0].addEventListener("click", function (e) {
           removeOutput(uid, self);
         });
+      }
+
+      if (initgrouptoggle.length > 0) {
+        initgrouptoggle[0].addEventListener('click', function(e) {
+          document.getElementById(uid+"---input").classList.toggle("cell-init");
+          server.socket.send(`CellObj["${uid}"]["props"] = Join[CellObj["${uid}"]["props"], <|"init"->!If[KeyExistsQ[CellObj["${uid}"]["props"], "init"], CellObj["${uid}"]["props"]["init"], False]|>]`);
+        })
       }
   
       addafter.addEventListener("click", function (e) {
