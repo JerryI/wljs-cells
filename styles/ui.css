@@ -32,7 +32,7 @@
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
 	z-index: -1;
-	background-color: white;
+	background-color: transparent;
 	box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
 }
 
@@ -331,33 +331,32 @@
     color: rgb(55, 53, 47);
     fill: currentcolor;
     line-height: 1.5;
-     font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol'; 
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
     -webkit-font-smoothing: auto;
-    background-color: white;
+    /* background: initial; */
 }
 
 .notion-cursor-listener {
-    width: 100vw;
-    height: 100%;
+    /* width: 100vw; */
+    /* height: 100%; */
     position: relative;
     display: flex;
     flex: 1 1 0%;
-    background-color: white;
     cursor: default;
 }
 
 .notion-sidebar-container {
 	flex-grow: 0;
 	flex-shrink: 0;
-
 	position: fixed;
 	z-index: 111;
-	background-color: rgb(251, 251, 250);
+	background-color: transparent;
 	transition: box-shadow 300ms ease 0s;
 	box-shadow: rgba(0, 0, 0, 0.024) -1px 0px 0px 0px inset;
 	width: 246px;
 	height: 100%;
-    transition: all ease-in-out 0.3s;
+	transition: all ease-in-out 0.3s;
+	border-radius: 5px;
 }
 
 
@@ -602,9 +601,33 @@
 	margin-right: 0px;
 	margin-bottom: 0px;
 }
+.notion-scroller {
+  scrollbar-width: 2px;
+  scrollbar-color: rgba(15, 15, 15, 0.2) transparent;
+}
+
+.notion-scroller::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.notion-scroller::-webkit-scrollbar-thumb {
+  background: rgba(15, 15, 15, 0.2);
+  border-radius: 5px;
+}
+
+.notion-scroller::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.notion-scroller::-webkit-scrollbar-button {
+  background-color: transparent;
+  border-radius: 5px;
+}
 
 .notion-outliner-private {
 	display: block;
+  background-color: transparent;
 }
 
 .notion-outliner-private-hide {
@@ -734,7 +757,8 @@
     opacity: 1;
     transition: opacity 700ms ease 0s, color 700ms ease 0s;
     position: fixed;
-	z-index: 110;
+    z-index: 110;
+    background: transparent;
 }
 
 .notion-topbar-action-buttons {
@@ -838,14 +862,18 @@
     flex-shrink: 1;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background: transparent;
+    /* border-radius: 5px; */
     z-index: 1;
+    /* margin-top: 2em; */
+    bottom: 0;
+    margin-top: 45px;
     height: 100%;
     max-height: 100%;
     position: relative;
-	margin-left: 246px;
+    margin-left: 246px;
     width: calc(100vw - 250px);
-	transition: all ease-in-out 0.3s;
+    /* transition: all ease-in-out 0.3s; */
 }
 
 @media only screen 
