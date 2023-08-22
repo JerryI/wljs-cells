@@ -3,6 +3,7 @@ BeginPackage["JerryI`WLJSCells`", {"JerryI`WolframJSFrontend`Utils`", "JerryI`WS
 WLJSCellsFire::usage = "WLJSCellsFire[SocketObject][EventName][CellObject]"
 WLJSCellsFakeFire::usage = "internal"
 WLJSCellsPopupFire::usage = "fires popups"
+WindowCellFire::usage = "WindowCellFire"
 
 Begin["Private`"]
 
@@ -215,10 +216,91 @@ WLJSCellsFakeFire[array_]["NewCell"][cell_] := (
     ];
 );
 
+
+
+
+
+WindowCellFire[addr_, origin_]["AddCellAfter"][next_, parent_] := (
+    Print["Add window cell "];
+    (*looks ugly actually. we do not need so much info*)
+    console["log", "fire event `` for ``", next, addr];
+    With[
+        {
+            obj = <|
+                        "id"->next[[1]], 
+                        "sign"->next["sign"],
+                        "type"->"input",
+                        "data"->If[next["data"]//NullQ, "", ExportString[next["data"], "String", CharacterEncoding -> "UTF8"] ],
+                        "props"->next["props"],
+                        "display"->next["display"],
+                        "state"->If[StringQ[ next["state"] ], next["state"], "idle"]
+                    |>,
+            
+            template = LoadPage[FileNameJoin[{"template", "input.wsp"}], {Global`id = next[[1]]}, "Base":>Public]
+        },
+
+
+        WebSocketSend[addr, Global`FrontEndCreateCell[template, obj ] // DefaultSerializer];
+    ];
+
+    With[
+        {
+            obj = <|
+                        "id"->next[[1]], 
+                        "sign"->next["sign"],
+                        "type"->next["type"],
+                        "data"->"- Projected -",
+                        "props"->next["props"],
+                        "display"->next["display"],
+                        "state"->If[StringQ[ next["state"] ], next["state"], "idle"],
+                        "after"-> <|
+                            "id"->parent[[1]], 
+                            "sign"->parent["sign"],
+                            "type"->parent["type"]                           
+                        |>
+                    |>,
+            
+            template = LoadPage[FileNameJoin[{"template", next["type"]<>".wsp"}], {Global`id = next[[1]]}, "Base":>Public]
+        },
+
+
+        WebSocketSend[origin, Global`FrontEndCreateCell[template, obj ] // DefaultSerializer];
+    ];    
+);
+
+WindowCellFire[addr_, origin_]["RemovedCell"][cell_] := (
+    (*actually frirstly you need to check!*)
+  
+    With[
+        {
+            obj = <|
+                        "id"->cell[[1]], 
+                        "sign"->cell["sign"],
+                        "type"->cell["type"]
+                    |>
+        },
+
+        WebSocketSend[addr, Global`FrontEndRemoveCell[obj] // DefaultSerializer];
+    ];
+
+    With[
+        {
+            obj = <|
+                        "id"->cell[[1]], 
+                        "sign"->cell["sign"],
+                        "type"->cell["type"]
+                    |>
+        },
+
+        WebSocketSend[origin, Global`FrontEndRemoveCell[obj] // DefaultSerializer];
+    ];
+);
+
 End[]
 
 EndPackage[]
 
 NotebookUse["EventFire", WLJSCellsFire]
+NotebookUse["WindowEventFire", WindowCellFire]
 NotebookUse["FakeEventFire", WLJSCellsFakeFire]
 NotebookUse["PopupFire", WLJSCellsPopupFire]

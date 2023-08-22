@@ -1,0 +1,7 @@
+<section class="cell-wrapper frontend-node"  style="opacity: 1;">
+    <?wsp LoadPage["template/tools.wsp", {hideButtonClass = If[CellObj[Global`id]["props"]["hidden"], "icon-hidden", ""]}] ?>
+    <div class="content-wrapper" id="<?wsp Global`id?>">
+            <p class="cell-paragraph frontend-paragraph" draggable="false" id="<?wsp Global`id?>---input"></p>
+            <div class="loader-line loader-line-<?wsp state ?>"></div>
+    </div>
+</section>

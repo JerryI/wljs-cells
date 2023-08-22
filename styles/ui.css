@@ -1117,7 +1117,7 @@ code, pre, .cm-editor .cm-scroller {
 
 .cell-wrapper {
   height: auto;
-  padding: 0 64px;
+  padding: 0 84px;
   position: relative;
   width: 100%
 }

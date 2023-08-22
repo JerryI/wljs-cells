@@ -6800,6 +6800,7 @@ Inflate$1.prototype.onEnd = function (status) {
       const play    = body.getElementsByClassName('node-settings-play')[0];
       let removeoutput    = body.getElementsByClassName('node-settings-removeoutput');
       let initgrouptoggle    = body.getElementsByClassName('node-settings-initgroup');
+      let project    = body.getElementsByClassName('node-settings-project');
       
 
       const addafter   = body.getElementsByClassName('node-settings-add')[0];
@@ -6817,6 +6818,13 @@ Inflate$1.prototype.onEnd = function (status) {
           removeOutput(uid, self);
         });
       }
+
+      if (project.length > 0) {
+        project[0].addEventListener("click", function (e) {
+          server.socket.send(`NotebookEvaluateProjected["${uid}"]`);
+          server.socket.send(`CellObj["${uid}"]["props"] = Join[CellObj["${uid}"]["props"], <|"projected"->!If[KeyExistsQ[CellObj["${uid}"]["props"], "projected"], CellObj["${uid}"]["props"]["projected"], False]|>]`);
+        });
+      }      
 
       if (initgrouptoggle.length > 0) {
         initgrouptoggle[0].addEventListener('click', function(e) {
