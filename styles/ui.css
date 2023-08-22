@@ -872,7 +872,7 @@
     max-height: 100%;
     position: relative;
     margin-left: 246px;
-    width: calc(100vw - 250px);
+    width: calc(100vw - 270px);
     /* transition: all ease-in-out 0.3s; */
 }
 
@@ -1013,7 +1013,8 @@ code, pre, .cm-editor .cm-scroller {
   letter-spacing: -.003em;
   line-height: 30px;
   margin-bottom: -.46em;
-  position: relative
+  position: relative;
+  cursor: text;
 }
 
 .cell-hidden {
