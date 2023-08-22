@@ -1,0 +1,43 @@
+<div class="tool-wrapper node-settings-actions frontend-tools tools-right" contenteditable="false" style="display:none">     
+            <div class="tool-div" >
+                <button class="btn node-settings-removeoutput" type="button" contenteditable="false">
+                    <svg viewBox="0 1 18 18" style="width: 22px; height: 22px; color: rgba(55, 53, 47, 0.3);" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 14 6 l -8 8 M 14 14 l -8 -8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button> 
+                <button class="btn node-settings-initgroup" type="button" contenteditable="false">
+                    <span style="font-size: 14px;color: rgba(119, 119, 119, 0.5);white-space: nowrap;line-height: 1;width: 1em;text-align: center;/*! background: white; */font-weight: 800;">i</span>
+                </button> 
+                <button class="btn node-settings-project" type="button" contenteditable="false"> 
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 31.5 33.3" style="enable-background:new 0 0 31.5 33.3;width: 17px;opacity: 0.2;stroke-width: 2.5;stroke-linecap: round;stroke-linejoin: miter;padding-left: 0.1em;padding-right: 0.1em;" xml:space="preserve" stroke="black">
+<path d="M4.2,1.9c-0.3,0-0.6,0.3-0.6,0.7v28.4c0,0.4,0.3,0.7,0.7,0.7c0.1,0,0.2,0,0.3-0.1l4.8-2.1v1.5c0,0.4,0.3,0.7,0.7,0.7
+	c0.1,0,0.2,0,0.2,0l5.2-2.1v1.5c0,0.4,0.3,0.7,0.7,0.7c0.1,0,0.2,0,0.2,0l11.8-4.7c0.3-0.1,0.4-0.3,0.4-0.6V7.3
+	c0-0.3-0.2-0.5-0.4-0.6L16.3,1.9c-0.1,0-0.2-0.1-0.3,0c-0.3,0-0.6,0.3-0.6,0.7V4l-5.2-2.1c-0.1,0-0.2-0.1-0.3,0
+	c-0.3,0-0.6,0.3-0.6,0.7V4L4.5,1.9C4.4,1.9,4.3,1.9,4.2,1.9L4.2,1.9z M16.8,3.5l10.5,4.2v18l-10.5,4.2V3.5z M10.7,3.5l4.7,2V28
+	l-4.7,2V14.7c0-0.4-0.3-0.7-0.7-0.7c0,0-0.1,0-0.1,0c-0.3,0-0.6,0.3-0.6,0.7V28l-4.4,1.9V3.6l4.4,1.9V12c0,0.4,0.3,0.7,0.7,0.7
+	c0.4,0,0.7-0.3,0.7-0.7c0,0,0,0,0,0V3.5z"></path>
+</svg> </button>
+                <button class="btn node-settings-play" type="button" contenteditable="false">
+                    <svg viewBox="0 1 14 14" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="drag_svg__StyledIconBase-ea9ulj-0 drag_svg__iuNRof" style="width: 15px; height: 15px; color: rgba(55, 53, 47, 0.3);">
+                        <path d="M4 12.4788V3.52116C4 2.23802 5.50646 1.54723 6.47878 2.38451L11.68 6.86335C12.375 7.46178 12.375 8.53822 11.68 9.13665L6.47878 13.6155C5.50646 14.4528 4 13.762 4 12.4788Z"></path>
+                    </svg>
+                </button>                
+            </div>            
+</div>
+<div class="tool-wrapper node-settings-actions frontend-tools" contenteditable="false" style="display:none">
+        <div>
+            <div class="tool-div">
+                <button type="button" contenteditable="false" class="btn node-settings-add">
+                    <svg viewBox="0 0 20 20" style="width: 20px; height: 18px;" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 3v14M17 10H3" stroke="gray" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+                <button class="btn node-settings-hide" type="button" contenteditable="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="<?wsp hideButtonClass ?>" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="drag_svg__StyledIconBase-ea9ulj-0 drag_svg__iuNRof" style="width: 18px; height: 18px; color: rgba(55, 53, 47, 0.3);">
+                        <path style="transform: scale(2.0);" d="M6.02734 8.80274C6.27148 8.80274 6.47168 8.71484 6.66211 8.51465L10.2803 4.82324C10.4268 4.67676 10.5 4.49609 10.5 4.28125C10.5 3.85156 10.1484 3.5 9.72363 3.5C9.50879 3.5 9.30859 3.58789 9.15234 3.74902L6.03223 6.9668L2.90722 3.74902C2.74609 3.58789 2.55078 3.5 2.33105 3.5C1.90137 3.5 1.55469 3.85156 1.55469 4.28125C1.55469 4.49609 1.62793 4.67676 1.77441 4.82324L5.39258 8.51465C5.58789 8.71973 5.78808 8.80274 6.02734 8.80274Z"></path>
+                   </svg>
+                </button>
+            </div>
+        </div>
+</div>  
+
