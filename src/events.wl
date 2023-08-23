@@ -128,6 +128,7 @@ WLJSCellsFire[channel_]["Warning"][text_] := Module[{template},
         template = LoadPage[FileNameJoin[{"template", "warning.wsp"}], {Global`id = CreateUUID[], Global`from = "Wolfram Evaluator", Global`message = t}, "Base"->Public];
     ];
     Print[Yellow<>"Warning"];
+    Print[text];
     Print[Reset];
 
     WebSocketSend[jsfn`Notebooks[channel]["channel"],  Global`FrontEndPopUp[template, text//ToString]];
@@ -139,6 +140,7 @@ WLJSCellsPopupFire[name_, text_] := Module[{template},
     ];
     Print[Blue<>"loopback"];
     Print[Reset];
+    Print[text];
  
     WebSocketSend[Global`client, Global`FrontEndPopUp[template, text//ToString] // DefaultSerializer];
 ];
@@ -151,7 +153,6 @@ WLJSCellsFire[channel_]["Print"][text_] := Module[{template},
     Print[Green<>"Print"];
     Print[Reset];
     Print["params"];
-    Print[channel];
     Print[text];
     WebSocketSend[jsfn`Notebooks[channel]["channel"],  Global`FrontEndPopUp[template, text//ToString]];
 ];
