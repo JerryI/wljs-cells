@@ -236,7 +236,7 @@ WindowCellFire[addr_, origin_]["AddCellAfter"][next_, parent_] := (
                         "state"->If[StringQ[ next["state"] ], next["state"], "idle"]
                     |>,
             
-            template = LoadPage[FileNameJoin[{"template", "input.wsp"}], {Global`id = next[[1]]}, "Base":>Public]
+            template = LoadPage[FileNameJoin[{"template", "compact.wsp"}], {Global`id = next[[1]]}, "Base":>Public]
         },
 
 
