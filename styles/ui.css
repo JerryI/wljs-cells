@@ -378,8 +378,9 @@
 	display: flex;
 	align-items: center;
 	min-width: 0px;
-	height: 45px;
+	height: 40px;
 	/*! width: 100%; */
+	-webkit-app-region: drag;
 	margin-bottom: 0px;
 	padding: 0;
 }
