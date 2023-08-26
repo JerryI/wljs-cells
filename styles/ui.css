@@ -8,8 +8,37 @@
 	--buttons-hover: rgb(255 206 59 / 53%);
 	--filter-frame: invert(1);
 	--buttons-hover-inverted: #0031c487; 
+	--background-menu: #1a1a1ae0;
 }
 
+.notion-list-view {
+  overflow-y: scroll; padding-bottom: 3em; padding-left: 2em; padding-right: 2em; /*! min-width: calc(100% - 192px); */
+
+}
+
+.notion-list-view {
+  scrollbar-width: 2px;
+  scrollbar-color: rgba(15, 15, 15, 0.2) transparent;
+}
+
+.notion-list-view::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.notion-list-view::-webkit-scrollbar-thumb {
+  background: rgba(15, 15, 15, 0.2);
+  border-radius: 5px;
+}
+
+.notion-list-view::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.notion-list-view::-webkit-scrollbar-button {
+  background-color: transparent;
+  border-radius: 5px;
+}
 
 .notion-app-inner.notion-light-theme > div {
 	height: 100%;
@@ -654,7 +683,8 @@
 
 .dropdown-frame {
 	border-radius: 4px;
-	background: #ffffff;
+	background: var(--background-menu);
+	border: 1px solid var(--borders-color);
 	/* backdrop-filter: blur(10px); */
 	position: relative;
 	max-width: calc(-24px + 100vw);
@@ -930,7 +960,7 @@
     position: relative;
     margin-left: 246px;
     background: var(--background-frame-color);
-    width: calc(100% - 250px);
+    /*! width: calc(100% - 250px); */
     height: 100%;
     /* border-left: solid 1px var(--borders-color); */
     /* transition: all ease-in-out 0.3s; */
@@ -1168,11 +1198,11 @@ code, pre, .cm-editor .cm-scroller {
 }
 
 .dropdown-kernel {
-  display: flex; 
-  align-items: center; 
-  flex-direction: column-reverse; 
-  transform-origin: 50% top; 
-  top: 45px; 
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  transform-origin: 50% top;
+  top: 45px;
   transition: all 0.1s cubic-bezier(0.16, 1, 0.5, 1);
   transform: translateY(0.5rem);
   visibility: hidden;
@@ -1180,10 +1210,10 @@ code, pre, .cm-editor .cm-scroller {
 }
 
 .dropdown-kernel-show {
-  transform: translateY(0rem);
+  transform: translateY(7.5rem);
   visibility: visible;
   opacity: 1;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
 }
 
 .dropdown-file {
