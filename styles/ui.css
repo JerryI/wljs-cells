@@ -526,6 +526,7 @@
 	border-radius: 3px;
 	/*! margin-left: 4px; */
 	margin-right: 4px;
+	margin-left: 4px;
 	width: calc(100% - 8px);
 	-webkit-app-region: no-drag;
 }
@@ -642,6 +643,7 @@
 .notion-outliner-private {
 	display: block;
   background-color: transparent;
+  padding-top: 0.5em;
 }
 
 .notion-outliner-private-hide {
@@ -868,16 +870,14 @@
 	-webkit-user-select: none;
 	transition: background 20ms ease-in 0s;
 	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
+	display: inline-block;
 	border-radius: 3px;
-	height: 28px;
-	width: 28px;
-	padding: 0px;
-	margin-right: 4px;
-	margin-left: 2px;
+	/* height: 25px; */
+	width: auto;
+	position: relative;
+	padding: 4px;
+	margin: 0;
+	vertical-align: text-top;
 }
 
 .notion-topbar-updates-button.notion-focusable > img {
@@ -920,7 +920,7 @@
     background: transparent;
     /* border-radius: 5px; */
     z-index: 1;
-    margin-top: 40px;
+    /* margin-top: 40px; */
     bottom: 0;
     /* display: grid; */
     /* margin-top: 45px; */
@@ -930,7 +930,7 @@
     position: relative;
     margin-left: 246px;
     background: var(--background-frame-color);
-    width: 100%;
+    width: calc(100% - 250px);
     height: 100%;
     /* border-left: solid 1px var(--borders-color); */
     /* transition: all ease-in-out 0.3s; */
@@ -958,7 +958,7 @@
 }
 
 .notion-frame-extended {
-	margin-left: 0;
+	margin-left: 0em;
 	width: 100vw;
 }
 
@@ -1232,11 +1232,11 @@ code, pre, .cm-editor .cm-scroller {
 .group-container {
   height: 100%;
   /* overflow-y: scroll; */
-  width: calc(100% - 13em);
+  width: 100%;
 }
 
 .styles-container-body {
-  width: 100vw;
+  /* width: 100vw; */
   height: 100vh;
   /* display: flex; */
   justify-content: center;
@@ -1245,9 +1245,9 @@ code, pre, .cm-editor .cm-scroller {
 
 .styles-container-editor {
     /* max-width: 100%; */
-    width: 100vw;
+    width: 100%;
     padding: 0.5em;
-    padding-right: 2em;
+    /* padding-right: 2em; */
     padding-top: 2em;
     padding-bottom: 400px;
     filter: var(--filter-frame);
@@ -1329,7 +1329,7 @@ a:hover {
 }
 
 * {
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 .styles-dismiss-cross {
@@ -1877,6 +1877,14 @@ table {
   .fraction {
     font-size: 0.5em;
   }
+}
+
+.hidden {
+	display: none;
+}
+
+.sidebar-button-inner-inline {
+  display: inline-block;
 }
 
 #notebook-attached {
