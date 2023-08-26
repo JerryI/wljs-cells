@@ -587,14 +587,19 @@
 	display: block; flex-shrink: 0; flex-grow: 0;
 }
 
+.opac {
+  opacity: 0;
+}
+
 .sidebar-container {
-	-webkit-user-select: none;
+    user-select: none;
+    -webkit-app-region: drag;
     transition: background 20ms ease-in 0s;
     cursor: pointer;
     display: flex;
     align-items: center;
     min-width: 0px;
-    height: 45px;
+    height: 40px;
     width: 100%;
     margin-bottom: 0px;
 }
@@ -1658,7 +1663,9 @@ border-radius: 4px;
 .pop-up-container {
   position: fixed;
   bottom: 2em;
-  right: 6em;
+  right: 1em;
+  filter: var(--filter-frame);
+  font-size: x-small;
 }
 
 span .cm-scroller {
