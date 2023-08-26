@@ -1663,7 +1663,7 @@ border-radius: 4px;
 .pop-up-container {
   position: fixed;
   bottom: 2em;
-  right: 1em;
+  right: 3em;
   filter: var(--filter-frame);
   font-size: x-small;
 }
