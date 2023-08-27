@@ -7,6 +7,7 @@
   --topbar-background: #eaeaea;
   --buttons-hover: rgb(255 206 59 / 53%);
   --filter-frame: none;
+  --sidebar-backround: transparent;
   --buttons-hover-inverted: #0031c487;
   --background-menu: rgb(236, 236, 236);
 }
@@ -22,6 +23,10 @@ body[data-theme='dark'] {
 	--filter-frame: invert(1);
 	--buttons-hover-inverted: #0031c487; 
 	--background-menu: #1a1a1ae0;
+}
+
+.novibrancy {
+  --sidebar-backround: var(--topbar-background);
 }
 
 .notion-list-view {
