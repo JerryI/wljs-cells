@@ -34,6 +34,18 @@ body[data-theme='dark'] {
 
 }
 
+.sidebar-bottom {
+  /* align-items: flex-end; */
+  /* margin-top: 0; */
+  /* display: flex; */
+  /* position: absolute; */
+  /* position: relative; */
+  /* bottom: 0; */
+  /* align-self: inherit; */
+  margin-top: auto;
+  padding-bottom: 1em;
+}
+
 .notion-list-view {
   scrollbar-width: 2px;
   scrollbar-color: rgba(15, 15, 15, 0.2) transparent;
