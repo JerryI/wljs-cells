@@ -674,8 +674,9 @@ body[data-theme='dark'] {
 	/* padding-bottom: 20px; */
 	box-shadow: transparent 0px 0px 0px inset;
 	transition: box-shadow 300ms ease 0s;
-	z-index: 1;
+	z-index: 9999999999;
 	overflow: hidden auto;
+	position: relative;
 	margin-right: 0px;
 	margin-bottom: 0px;
 	/* backdrop-filter: blur(20px); */
@@ -725,6 +726,7 @@ body[data-theme='dark'] {
 	max-width: calc(-24px + 100vw);
 	box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
 	overflow: hidden;
+	z-index: 14;
 }
 
 .vertical {
@@ -759,6 +761,7 @@ body[data-theme='dark'] {
 	align-items: center;
 	justify-content: center;
 	height: 20px;
+	z-index: 0;
 	width: 20px;
 	border-radius: 0.25em;
 	flex-shrink: 0;
@@ -1242,6 +1245,7 @@ code, pre, .cm-editor .cm-scroller {
   transform: translateY(0.5rem);
   visibility: hidden;
   opacity: 0;
+  z-index: 150;
 }
 
 .dropdown-kernel-show {
@@ -1493,7 +1497,7 @@ p {
 }
 
 .good-kernel {
-  background-color: rgba(126, 156, 70, 0.54)
+  background-color: rgba(126, 156, 70, 0.54);
   color: var(--topbar-text-color);
 }
 
