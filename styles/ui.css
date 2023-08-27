@@ -1,4 +1,17 @@
 :root {
+  --sidebar-text-color: rgb(52,51,52);
+  --topbar-text-color: rgb(52,51,52);
+  --filter-buttons-svg: brightness(0.5);
+  --background-frame-color: rgb(236, 236, 236);
+  --borders-color: #d8d4c800;
+  --topbar-background: #eaeaea;
+  --buttons-hover: rgb(255 206 59 / 53%);
+  --filter-frame: invert(1);
+  --buttons-hover-inverted: #0031c487;
+  --background-menu: rgb(236, 236, 236);
+}
+
+body[data-theme='dark'] {
 	--sidebar-text-color: #d8d4c8;
 	--topbar-text-color: #d1d1d1;
 	--filter-buttons-svg: invert(1);
