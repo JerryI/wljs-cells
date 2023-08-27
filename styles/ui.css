@@ -1462,6 +1462,12 @@ h4, p {
   margin-top:0
 }
 
+h5 {
+  margin: 0;
+  font-size: small;
+  font-weight: bold;
+}
+
 p {
   font-size: small;
   margin-bottom: 0;
