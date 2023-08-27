@@ -1493,6 +1493,11 @@ p {
 }
 
 .good-kernel {
+  background-color: rgba(126, 156, 70, 0.54)
+  color: var(--topbar-text-color);
+}
+
+.best-kernel {
   background-color: rgb(0 159 0 / 54%);
   color: var(--topbar-text-color);
 }
