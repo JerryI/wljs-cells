@@ -6,7 +6,7 @@
   --borders-color: #d8d4c800;
   --topbar-background: #eaeaea;
   --buttons-hover: rgb(255 206 59 / 53%);
-  --filter-frame: invert(1);
+  --filter-frame: none;
   --buttons-hover-inverted: #0031c487;
   --background-menu: rgb(236, 236, 236);
 }
