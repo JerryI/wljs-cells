@@ -1969,9 +1969,7 @@ table {
   }
 }
 
-.hidden {
-	display: none;
-}
+
 
 .sidebar-button-inner-inline {
   display: inline-block;
@@ -1982,4 +1980,8 @@ table {
 }
 #ws-link {
 	filter: invert(0.5);
+}
+
+.hidden {
+	display: none;
 }
