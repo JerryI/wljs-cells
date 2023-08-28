@@ -6980,7 +6980,8 @@ Inflate$1.prototype.onEnd = function (status) {
     }
 
     evalString(string) {
-      return server.askKernel(string);
+      const signature = this.sign;
+      return server.askKernel(`Module[{result}, WolframEvaluator["${string}", False, "${signature}"][(result = #1)&]; result]`);
     }
     
     eval(content) {
