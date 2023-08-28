@@ -6978,6 +6978,10 @@ Inflate$1.prototype.onEnd = function (status) {
       //const fixed = content.replaceAll('\\\"', '\\\\\"').replaceAll('\"', '\\"');
       server.socket.send(`NotebookOperate["${this.uid}", CellObjSave, "${content}"];`);
     }
+
+    evalString(string) {
+      return server.askKernel(string);
+    }
     
     eval(content) {
       if (this.state === 'pending') {
