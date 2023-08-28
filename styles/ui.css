@@ -635,7 +635,7 @@ body[data-theme='dark'] {
 }
 
 .notion-focusable .focusable-holder {
-	display: flex; align-items: center; line-height: 120%; width: 100%; min-height: 28px; font-size: 14px;
+	display: flex; align-items: center;  width: 100%; font-size: small;
 }
 
 .notion-focusable .focusable-holder .focusable-holder-holder {
