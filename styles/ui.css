@@ -9,7 +9,7 @@
   --filter-frame: none;
   --sidebar-backround: transparent;
   --buttons-hover-inverted: rgb(255 206 59 / 53%);
-  --background-menu: rgb(236, 236, 236);
+  --background-menu: rgb(236 236 236 / 90%);
 }
 
 body[data-theme='dark'] {
