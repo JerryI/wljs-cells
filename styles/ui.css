@@ -1985,6 +1985,7 @@ table {
 
 .sidebar-button-inner-inline {
   display: inline-block;
+  position: relative;
 }
 
 #notebook-attached {
