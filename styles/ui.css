@@ -1211,6 +1211,10 @@ code, pre, .cm-editor .cm-scroller {
   user-select: none
 }
 
+.notion-frame-extended .tool-wrapper {
+	display:none;
+}
+
 .tools-show {
   opacity: 1
 }
@@ -1256,16 +1260,18 @@ code, pre, .cm-editor .cm-scroller {
 }
 
 .dropdown-file {
-  display: flex; 
-  align-items: center; 
-  flex-direction: column-reverse; 
-  transform-origin: 50% top; 
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  transform-origin: 50% top;
   transition: all 0.1s cubic-bezier(0.16, 1, 0.5, 1);
   transform: translateY(0.5rem);
   visibility: hidden;
   opacity: 0;
   margin-left: 2em;
-  z-index: 9;
+  z-index: 150;
+  top: 2em;
+  right: 0;
 }
 
 .dropdown-file-show {
@@ -1279,6 +1285,10 @@ code, pre, .cm-editor .cm-scroller {
   padding: 0 5.4em 0 3.5em;
   position: relative;
   /* width: 100vw; */
+}
+
+.notion-frame-extended .cell-wrapper {
+  padding: 0 1em 0 3.5em;
 }
 
 .content-wrapper {
@@ -1609,7 +1619,9 @@ p {
     border-radius: 6px;
 }
 
-
+.notion-page-block{
+	position:relative;
+}
 
 .filename-input {
   font-size: 14px;
