@@ -252,7 +252,7 @@ WindowCellFire[addr_, origin_]["AddCellAfter"][next_, parent_] := (
                         "type"->next["type"],
                         "data"->"- Projected -",
                         "props"->next["props"],
-                        "display"->next["display"],
+                        "display"->"markdown",
                         "state"->If[StringQ[ next["state"] ], next["state"], "idle"],
                         "after"-> <|
                             "id"->parent[[1]], 
