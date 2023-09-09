@@ -2026,7 +2026,7 @@ table {
   top: 0px;
   left: 100%;
   right: 0px;
-  /* animation: var(--kernel-animation) 1s linear infinite; */
+  animation: var(--kernel-animation) 1s linear infinite; 
   bottom: 0px;
   border-right: solid 2px var(--kernel-state);
   width: 0;
