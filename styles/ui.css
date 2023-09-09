@@ -10,6 +10,13 @@
   --sidebar-backround: transparent;
   --buttons-hover-inverted: rgb(255 206 59 / 53%);
   --background-menu: rgb(236 236 236 / 90%);
+
+  --kernel-best: rgb(17 255 60 / 25%);
+  --kernel-good: rgba(17, 184, 255, 0.35);
+  --kernel-load: rgba(255, 231, 17, 0.35);
+  --kernel-no: rgba(223, 222, 222, 0.25);
+  --kernel-undefined: rgba(223, 222, 222, 0.39);
+  --kernel-bad: rgba(255, 17, 17, 0.35);
 }
 
 body[data-theme='dark'] {
@@ -945,7 +952,7 @@ body[data-theme='dark'] {
 	position: relative;
 	padding: 4px;
 	margin: 0;
-	vertical-align: text-top;
+	vertical-align: middle;
 }
 
 .notion-topbar-updates-button.notion-focusable > img {
