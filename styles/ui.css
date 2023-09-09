@@ -14,9 +14,18 @@
   --kernel-best: rgb(17 255 60 / 25%);
   --kernel-good: rgba(17, 184, 255, 0.35);
   --kernel-load: rgba(255, 231, 17, 0.35);
-  --kernel-no: rgba(223, 222, 222, 0.25);
-  --kernel-undefined: rgba(223, 222, 222, 0.39);
+  --kernel-no: none;
+  --kernel-undefined: none;
   --kernel-bad: rgba(255, 17, 17, 0.35);
+
+  --kernel-animation-bad: linePAnim;
+  --kernel-animation-best: none;
+  --kernel-animation-good: linePAnim;
+  --kernel-animation-load: linePAnim;
+  --kernel-animation-no: none;
+  --kernel-animation-undefined: none;
+  --kernel-animation-bad: none;
+
 }
 
 body[data-theme='dark'] {
@@ -2007,4 +2016,33 @@ table {
 
 .hidden {
 	display: none;
+}
+
+
+
+.notion-sidebar-container.kernel-border:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 100%;
+  right: 0px;
+  /* animation: var(--kernel-animation) 1s linear infinite; */
+  bottom: 0px;
+  border-right: solid 2px var(--kernel-state);
+  width: 0;
+}
+
+@keyframes linePAnim {
+0% {
+  top: -50%;
+  height: 10%;
+}
+40% {
+  top: -100%;
+  height: 80%;
+}
+100% {
+  top: 100%;
+  height: 100%;
+}
 }
