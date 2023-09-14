@@ -26,6 +26,24 @@
   --kernel-animation-undefined: none;
   --kernel-animation-bad: none;
 
+  --editor-key-meta: #404740;
+  --editor-key-keyword: #708;
+  --editor-key-atom: #219;
+  --editor-key-literal: #164;
+  --editor-key-string: #a11;
+  --editor-key-escape: #e40;
+  --editor-key-variable: #00f;
+  --editor-local-variable: #30a;
+  --editor-key-type: #085;
+  --editor-key-class: #167;
+  --editor-special-variable: #256;
+  --editor-key-property: #00c;
+  --editor-key-comment: #940;
+  --editor-key-invalid: #f00;
+
+
+
+
 }
 
 body[data-theme='dark'] {
