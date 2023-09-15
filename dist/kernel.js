@@ -7012,6 +7012,7 @@ Inflate$1.prototype.onEnd = function (status) {
       
       const self = this;
       if (this.type === 'input') this.element.addEventListener('focusin', ()=>{
+        server.socket.send(`NotebookSelectCell["${self.uid}"]`);
         currentCell = self;
       });
       

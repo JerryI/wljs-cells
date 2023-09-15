@@ -353,6 +353,7 @@ function __emptyFalse(a) {
       
       const self = this;
       if (this.type === 'input') this.element.addEventListener('focusin', ()=>{
+        server.socket.send(`NotebookSelectCell["${self.uid}"]`);
         currentCell = self;
       });
       
