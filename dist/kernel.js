@@ -6692,6 +6692,28 @@ Inflate$1.prototype.onEnd = function (status) {
   
   core.CellHash = CellHash;
   core.CellList = CellList;
+
+  let currentCell;
+
+  if (window.electronAPI) {
+    window.electronAPI?.cellop((event, id) => {
+        console.log(id);
+        if (server.socket.readyState != 1) alert('Connection to the server was lost!');
+
+        if (id === 'HC') {
+            
+          currentCell.hideCell();           
+        }
+
+        if (id === 'HUC') {
+          currentCell.hidePrev();       
+        }    
+        
+        if (id === 'HLC') {
+          currentCell.hideNext();       
+        }
+    });
+  }
   
   
   class CellWrapper {
@@ -6715,7 +6737,7 @@ Inflate$1.prototype.onEnd = function (status) {
     focusPrev(startpoint) {
       console.log('prev');
       const pos = CellList[this.sign].indexOf(this.uid);
-      if (pos - 1 > 0) {
+      if (pos - 1 >= 0) {
         CellHash.get(CellList[this.sign][pos - 1]).display?.editor?.focus();
       }
     }  
@@ -6840,18 +6862,58 @@ Inflate$1.prototype.onEnd = function (status) {
       play?.addEventListener("click", function (e) {
         evaluate();
       });
+
+      self.hideico = hide;
   
       hide.addEventListener("click", function (e) {
-        if(document.getElementById(uid).getElementsByClassName('output-cell').length === 0) {
-          alert('The are no output cells can be hidden');
-          return;
-        }
-        document.getElementById(uid+"---input").classList.toggle("cell-hidden");
-        const svg = hide.getElementsByTagName('svg');
-        svg[0].classList.toggle("icon-hidden");
-        server.socket.send(`CellObj["${uid}"]["props"] = Join[CellObj["${uid}"]["props"], <|"hidden"->!CellObj["${uid}"]["props"]["hidden"]|>]`);
-      });    
+        self.hideCell(uid);
+      });  
     }
+
+    hideCell(id) {
+      const pos = CellList[this.sign].indexOf(this.uid);
+
+      console.log('HIDE!');
+      console.log(pos);
+      if (pos < 0) {
+        console.warn('cell does not exists');
+        return;
+      }      
+      const sign = this.sign;
+      if (CellHash.get(CellList[this.sign][pos]).type === 'output') {
+        console.log('trying to find parent cell');
+        if (pos - 1 >= 0) CellHash.get(CellList[sign][pos - 1]).hideCell();
+        return;
+      }
+
+      if(document.getElementById(this.uid).getElementsByClassName('output-cell').length === 0) {
+        alert('The are no output cells can be hidden');
+        return;
+      }
+      document.getElementById(this.uid+"---input").classList.toggle("cell-hidden");
+      const svg = this.hideico.getElementsByTagName('svg');
+      svg[0].classList.toggle("icon-hidden");
+      server.socket.send(`CellObj["${this.uid}"]["props"] = Join[CellObj["${this.uid}"]["props"], <|"hidden"->!CellObj["${this.uid}"]["props"]["hidden"]|>]`);
+      
+    }
+
+    hideNext(startpoint) {
+      console.log('next h');
+      const pos = CellList[this.sign].indexOf(this.uid);
+      if (pos + 1 < CellList[this.sign].length) {
+        CellHash.get(CellList[this.sign][pos + 1]).hideCell();
+      }
+    }
+  
+    hidePrev(startpoint) {
+      console.log('prev h');
+      const pos = CellList[this.sign].indexOf(this.uid);
+      console.log(pos);
+      if (pos - 1 >= 0) {
+        console.log('good');
+        CellHash.get(CellList[this.sign][pos - 1]).hideCell();
+      }
+    }      
     
     addCellAfter(uid) {  
       const id = uid || this.uid;
@@ -6943,9 +7005,15 @@ Inflate$1.prototype.onEnd = function (status) {
   
       this.element = document.getElementById(this.uid+"---"+this.type);
       if (this.type === 'input') this.toolbox();
+      
       this.horisontalToolbox();
   
-      this.display = new window.SupportedCells[input["display"]].view(this, input["data"]);    
+      this.display = new window.SupportedCells[input["display"]].view(this, input["data"]);  
+      
+      const self = this;
+      if (this.type === 'input') this.element.addEventListener('focusin', ()=>{
+        currentCell = self;
+      });
       
       return this;
     }
