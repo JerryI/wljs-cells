@@ -6696,7 +6696,8 @@ Inflate$1.prototype.onEnd = function (status) {
   let currentCell;
 
   if (window.electronAPI) {
-    window.electronAPI?.cellop((event, id) => {
+    if (window.electronAPI.cellop) {
+    window.electronAPI.cellop((event, id) => {
         console.log(id);
         if (server.socket.readyState != 1) alert('Connection to the server was lost!');
 
@@ -6713,6 +6714,7 @@ Inflate$1.prototype.onEnd = function (status) {
           currentCell.hideNext();       
         }
     });
+  }
   }
   
   
