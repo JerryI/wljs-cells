@@ -7,7 +7,7 @@
   --topbar-background: #eaeaea;
   --buttons-hover: rgb(255 206 59 / 53%);
   --filter-frame: none;
-  --sidebar-backround: transparent;
+  --sidebar-background: transparent;
   --buttons-hover-inverted: rgb(255 206 59 / 53%);
   --background-menu: rgb(236 236 236 / 90%);
 
@@ -452,7 +452,7 @@ body[data-theme='dark'] {
 	z-index: 111;
 	font-size: small;
 	color: var(--sidebar-text-color);
-	background-color: transparent;
+	background-color: var(--sidebar-background);
 	transition: box-shadow 300ms ease 0s;
 	box-shadow: rgba(0, 0, 0, 0.024) -1px 0px 0px 0px inset;
 	width: 246px;
