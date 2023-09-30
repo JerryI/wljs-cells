@@ -14,7 +14,7 @@ Public = ParentDirectory[$InputFileName//DirectoryName]
 
 WLJSCellsFire[addr_]["NewCell"][cell_] := (
     (*looks ugly actually. we do not need so much info*)
-    console["log", "fire event `` for ``", cell, addr];
+ 
     With[
         {
             obj = <|
@@ -68,7 +68,7 @@ WLJSCellsFire[addr_]["UpdateState"][cell_] := (
 WLJSCellsFire[addr_]["AddCellAfter"][next_, parent_] := (
     Print["Add cell after"];
     (*looks ugly actually. we do not need so much info*)
-    console["log", "fire event `` for ``", next, addr];
+ 
     With[
         {
             obj = <|
@@ -96,7 +96,7 @@ WLJSCellsFire[addr_]["AddCellAfter"][next_, parent_] := (
 
 WLJSCellsFire[addr_]["CellMorphInput"][cell_] := (
     (*looks ugly actually. we do not need so much info*)
-    console["log", "fire event `` for ``", cell, addr];
+
     With[
         {
             obj = <|
@@ -113,8 +113,8 @@ WLJSCellsFire[addr_]["CellMorphInput"][cell_] := (
 );
 
 WLJSCellsFire[addr_]["CellError"][cell_, text_] := Module[{template},
-    Print[Red<>"ERROR"];
-    Print[Reset];
+    Print["ERROR"];
+
 
     With[{t = text},
         template = LoadPage[FileNameJoin[{"template", "error.wsp"}], {Global`id = cell, Global`from = "Wolfram Evaluator", Global`message = t}, "Base"->Public];
@@ -127,9 +127,7 @@ WLJSCellsFire[channel_]["Warning"][text_] := Module[{template},
     With[{t = text},
         template = LoadPage[FileNameJoin[{"template", "warning.wsp"}], {Global`id = CreateUUID[], Global`from = "Wolfram Evaluator", Global`message = t}, "Base"->Public];
     ];
-    Print[Yellow<>"Warning"];
-    Print[text];
-    Print[Reset];
+    Print["Warning"];
 
     WebSocketSend[jsfn`Notebooks[channel]["channel"],  Global`FrontEndPopUp[template, text//ToString]];
 ];
@@ -138,8 +136,7 @@ WLJSCellsPopupFire[name_, text_] := Module[{template},
     With[{t = text},
         template = LoadPage[FileNameJoin[{"template", name<>".wsp"}], {Global`id = CreateUUID[], Global`from = "JS Console", Global`message = t}, "Base"->Public];
     ];
-    Print[Blue<>"loopback"];
-    Print[Reset];
+    Print["---loopback---"];
     Print[text];
  
     WebSocketSend[Global`client, Global`FrontEndPopUp[template, text//ToString] // DefaultSerializer];
@@ -150,10 +147,9 @@ WLJSCellsFire[channel_]["Print"][text_] := Module[{template},
     With[{t = text},
         template = LoadPage[FileNameJoin[{"template", "print.wsp"}], {Global`id = CreateUUID[], Global`from = "Wolfram Evaluator", Global`message = t}, "Base":>Public];
     ];
-    Print[Green<>"Print"];
-    Print[Reset];
-    Print["params"];
+    Print["---print---"];
     Print[text];
+    
     WebSocketSend[jsfn`Notebooks[channel]["channel"],  Global`FrontEndPopUp[template, text//ToString]];
 ];
 
@@ -193,7 +189,7 @@ WLJSCellsFire[addr_]["CellMorph"][cell_] := (Null);
 
 WLJSCellsFakeFire[array_]["NewCell"][cell_] := (
     (*looks ugly actually. we do not need so much info*)
-    console["log", "fire event `` for ``", cell, array];
+
     With[
         {
             obj = <|
@@ -222,9 +218,9 @@ WLJSCellsFakeFire[array_]["NewCell"][cell_] := (
 
 
 WindowCellFire[addr_, origin_]["AddCellAfter"][next_, parent_] := (
-    Print["Add window cell "];
+    Print["Add window cell"];
     (*looks ugly actually. we do not need so much info*)
-    console["log", "fire event `` for ``", next, addr];
+
     With[
         {
             obj = <|
