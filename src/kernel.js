@@ -526,6 +526,17 @@ function __emptyFalse(a) {
       setTimeout(interpretate.garbageCollect, time);
   }
 
+  core.FrontEditorSelected = async (args, env) => {
+    const op = await interpretate(args[0], env);
+    if (op == "Get")
+      return window.EditorSelected.get();
+
+    if (op == "Set") {
+      const data = await interpretate(args[1], env);
+      window.EditorSelected.set(data);
+    }
+  }
+
   
 
 
