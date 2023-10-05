@@ -437,6 +437,9 @@ function __emptyFalse(a) {
         });
 
         server.kernel.socket.send('WSSocketEstablish');
+
+        console.warn('Asking for all definitions...');
+        server.kernel.socket.send('JerryI`WolframJSFrontend`Remote`Private`GetDefinedSymbols');
       }; 
   
       server.kernel.socket.onmessage = function(event) {
@@ -460,6 +463,31 @@ function __emptyFalse(a) {
   
   
   }
+
+  core.FrontAddDefinition = async (args, env) => {
+    const data = await interpretate(args[0], env);
+    console.log(data);
+    
+    data.forEach((element)=>{
+      const name = element[0];
+      const context = element[1];
+  
+      if (!(name in core.FrontAddDefinition.symbols)) {
+        window.EditorAutocomplete.extend([  
+          {
+              "label": name,
+              "type": "keyword",
+              "info": "User's defined symbol in "+context  
+          }]);
+  
+        core.FrontAddDefinition.symbols[name] = context;
+      }
+    });
+
+
+  }
+
+  core.FrontAddDefinition.symbols = {};
   
   core.FrontEndRemoveCell = async function (args, env) {
     var input = await interpretate(args[0]);
