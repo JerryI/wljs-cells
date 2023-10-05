@@ -11,6 +11,14 @@
   --buttons-hover-inverted: rgb(255 206 59 / 53%);
   --background-menu: rgb(236 236 236 / 90%);
 
+  --font-size-small: small;
+  --font-size-medium: medium;
+  --font-size-large: large;
+  --font-size-x-large: x-large;
+  --font-size-xx-large: xx-large;
+  --font-size-x-small: x-small;
+
+
   --kernel-best: rgb(17 255 60 / 25%);
   --kernel-good: rgba(17, 184, 255, 0.35);
   --kernel-load: rgba(255, 231, 17, 0.35);
@@ -200,7 +208,7 @@ body[data-theme='dark'] {
 	display: flex;
     align-items: center;
     width: 100%;
-    font-size: small;
+    font-size: var(--font-size-small);
     min-height: 27px;
     padding: 2px 10px;
     margin-top: 1px;
@@ -450,7 +458,7 @@ body[data-theme='dark'] {
 	flex-shrink: 0;
 	position: fixed;
 	z-index: 111;
-	font-size: small;
+	font-size: var(--font-size-small);
 	color: var(--sidebar-text-color);
 	background-color: var(--sidebar-background);
 	transition: box-shadow 300ms ease 0s;
@@ -671,7 +679,7 @@ body[data-theme='dark'] {
 }
 
 .notion-focusable .focusable-holder {
-	display: flex; align-items: center;  width: 100%; font-size: small;
+	display: flex; align-items: center;  width: 100%; font-size: var(--font-size-small);
 }
 
 .notion-focusable .focusable-holder .focusable-holder-holder {
@@ -889,7 +897,7 @@ body[data-theme='dark'] {
   transition: opacity 700ms ease 0s, color 700ms ease 0s;
   position: fixed;
   z-index: 110;
-  font-size: small;
+  font-size: var(--font-size-small);
   margin-left: 246px;
   background: var(--topbar-background);
   color: var(
@@ -1372,14 +1380,14 @@ code, pre, .cm-editor .cm-scroller {
     padding-bottom: 0;
     filter: var(--filter-frame);
     overflow-y: scroll;
-    /* font-size: small; */
+    /* font-size: var(--font-size-small); */
 }
 
 .styles-container-editor .frontend-paragraph {
   /*font-family: Menlo, Consolas, monospace;*/
   font-family: system-ui;
   font-weight: normal;
-  font-size: small;
+  font-size: var(--font-size-small);
 }
 
 
@@ -1403,7 +1411,7 @@ code, pre, .cm-editor .cm-scroller {
   position: relative;
   padding-left:1em;
   padding-right:1em;
-  font-size: small;
+  font-size: var(--font-size-small);
   background:none;
   content: attr(data-object);
 }
@@ -1436,7 +1444,7 @@ html {
   margin: 0;
   width: 100vw;
   font-family: system-ui;
-  font-size: medium;
+  font-size: var(--font-size-medium);
   font-weight: normal;
 }
 
@@ -1486,13 +1494,13 @@ a:hover {
 }
 
 h1 {
-  font-size: xx-large;
+  font-size: var(--font-size-xx-large);
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 h2 {
-  font-size: x-large;
+  font-size: var(--font-size-x-large);
   font-weight: bold;
   margin-bottom:.25rem
 }
@@ -1502,13 +1510,13 @@ h2, h3 {
 }
 
 h3 {
-  font-size: large;
+  font-size: var(--font-size-large);
   font-weight: bold;
   margin-bottom:.125rem
 }
 
 h4 {
-  font-size: medium;
+  font-size: var(--font-size-medium);
   font-weight: bold;
   margin-bottom:.25rem
 }
@@ -1519,12 +1527,12 @@ h4, p {
 
 h5 {
   margin: 0;
-  font-size: small;
+  font-size: var(--font-size-small);
   font-weight: bold;
 }
 
 p {
-  font-size: small;
+  font-size: var(--font-size-small);
   margin-bottom: 0;
   /* padding: 0; */
   line-height: 1.2;
@@ -1665,7 +1673,7 @@ p {
 }
 
 .filename-input {
-  font-size: small;
+  font-size: var(--font-size-small);
   line-height: 2em;
 }
 
@@ -1771,7 +1779,7 @@ border-radius: 4px;
   bottom: 2em;
   right: 3em;
   filter: var(--filter-frame);
-  font-size: x-small;
+  font-size: var(--font-size-x-small);
 }
 
 span .cm-scroller {
@@ -1842,7 +1850,7 @@ table {
   border-radius: 3px;
   padding-left: 6px;
   padding-right: 6px;
-  font-size: small;
+  font-size: var(--font-size-small);
   line-height: 120%;
   margin: 0px;
   height:16px;
