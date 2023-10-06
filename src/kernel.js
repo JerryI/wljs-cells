@@ -560,7 +560,8 @@ function __emptyFalse(a) {
       return window.EditorSelected.get();
 
     if (op == "Set") {
-      const data = await interpretate(args[1], env);
+      let data = await interpretate(args[1], env);
+      if (data.charAt(0) == '"') data = data.slice(1,-1);
       window.EditorSelected.set(data);
     }
   }
