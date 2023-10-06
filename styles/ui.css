@@ -51,8 +51,21 @@
   
   --editor-outline: #696969;
 
+  --editor-bracket-1: #5461c8;
+  --editor-bracket-2: #c724b1;
+  --editor-bracket-3: #e4002b;
+  --editor-bracket-4: #ff6900;
+  --editor-bracket-5: #978d00;
+  --editor-bracket-6: #019e79;
+  --editor-bracket-7: #008dc1;
 
-
+  --editor-bracket-1-a: #5461c8; 
+  --editor-bracket-2-a: #c724b1;
+  --editor-bracket-3-a: #e4002b;
+  --editor-bracket-4-a: #ff6900;
+  --editor-bracket-5-a: #978d00;
+  --editor-bracket-6-a: #019e79;
+  --editor-bracket-7-a: #008dc1;
 
 }
 
