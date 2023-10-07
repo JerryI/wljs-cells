@@ -323,7 +323,7 @@ function __emptyFalse(a) {
         CellList[this.sign].splice(pos+1, 0, input["id"]);
   
   
-      } if ('before' in input) {
+      } else if ('before' in input) {
 
         console.log('inserting before something');
   
