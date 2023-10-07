@@ -323,6 +323,26 @@ function __emptyFalse(a) {
         CellList[this.sign].splice(pos+1, 0, input["id"]);
   
   
+      } if ('before' in input) {
+
+        console.log('inserting before something');
+  
+        const beforeType = input["before"]["type"];
+        const currentType = input["type"];
+        const pos = CellList[this.sign].indexOf(input["before"]["id"]);
+  
+        if (beforeType === 'input') {
+          console.log("input cell before inputcell");
+          document.getElementById(input["before"]["id"]).parentNode.insertAdjacentHTML('beforebegin', template);
+        }
+  
+        if (beforeType === 'output') {
+          console.log("input cell before outputcell");
+          document.getElementById(input["before"]["id"]+"---output").parentNode.parentNode.parentNode.insertAdjacentHTML('beforebegin', template);
+        }   
+        
+        CellList[this.sign].splice(pos, 0, input["id"]);
+
       } else {
         
         console.log('plain insertion');

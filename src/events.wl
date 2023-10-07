@@ -94,6 +94,35 @@ WLJSCellsFire[addr_]["AddCellAfter"][next_, parent_] := (
     ];
 );
 
+WLJSCellsFire[addr_]["AddCellBefore"][next_, parent_] := (
+    Print["Add cell before"];
+    (*looks ugly actually. we do not need so much info*)
+ 
+    With[
+        {
+            obj = <|
+                        "id"->next[[1]], 
+                        "sign"->next["sign"],
+                        "type"->next["type"],
+                        "data"->If[next["data"]//NullQ, "", ExportString[next["data"], "String", CharacterEncoding -> "UTF8"] ],
+                        "props"->next["props"],
+                        "display"->next["display"],
+                        "state"->If[StringQ[ next["state"] ], next["state"], "idle"],
+                        "before"-> <|
+                            "id"->parent[[1]], 
+                            "sign"->parent["sign"],
+                            "type"->parent["type"]                           
+                        |>
+                    |>,
+            
+            template = LoadPage[FileNameJoin[{"template", next["type"]<>".wsp"}], {Global`id = next[[1]]}, "Base":>Public]
+        },
+
+
+        WebSocketSend[addr, Global`FrontEndCreateCell[template, obj ] // DefaultSerializer];
+    ];
+);
+
 WLJSCellsFire[addr_]["CellMorphInput"][cell_] := (
     (*looks ugly actually. we do not need so much info*)
 
