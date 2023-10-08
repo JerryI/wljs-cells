@@ -6984,11 +6984,13 @@ Inflate$1.prototype.onEnd = function (status) {
   
       } else if ('before' in input) {
 
-        console.log('inserting before something');
+        
   
         const beforeType = input["before"]["type"];
         input["type"];
         const pos = CellList[this.sign].indexOf(input["before"]["id"]);
+
+        console.log('inserting '+input["id"]+'---'+input["type"]+' before cell '+input["before"]["id"]+'---'+beforeType);
   
         if (beforeType === 'input') {
           console.log("input cell before inputcell");
