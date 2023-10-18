@@ -2,14 +2,14 @@
     --sidebar-text-color: rgb(52,51,52);
     --topbar-text-color: rgb(52,51,52);
     --filter-buttons-svg: brightness(0.5);
-    --background-frame-color: rgb(236, 236, 236);
+    --background-frame-color: rgb(249, 249, 249);
     --borders-color: #d8d4c800;
-    --topbar-background: #eaeaea;
+    --topbar-background: rgb(249, 249, 249);
     --buttons-hover: rgb(255 206 59 / 53%);
     --filter-frame: none;
     --sidebar-background: transparent;
     --buttons-hover-inverted: rgb(255 206 59 / 53%);
-    --background-menu: rgb(236 236 236 / 90%);
+    --background-menu: rgb(249 249 249 / 90%);
   
     --font-size-small: small;
     --font-size-medium: medium;
