@@ -17,6 +17,12 @@
     --font-size-x-large: x-large;
     --font-size-xx-large: xx-large;
     --font-size-x-small: x-small;
+
+    --font-paragraph-family: system-ui;
+    --font-paragraph-size: var(--font-size-small);
+
+    --font-code-family: Menlo;
+    --font-code-size: var(--font-size-small);
   
   
     --kernel-best: rgb(17 255 60 / 25%);

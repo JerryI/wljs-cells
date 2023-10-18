@@ -1065,7 +1065,8 @@
 }
 
 code, pre, .cm-editor .cm-scroller {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-family: var(--font-code-family);
+  font-size: var(--font-code-size);
   /*line-height: 1.5em  */
 }
 
@@ -1314,9 +1315,9 @@ code, pre, .cm-editor .cm-scroller {
 
 .styles-container-editor .frontend-paragraph {
   /*font-family: Menlo, Consolas, monospace;*/
-  font-family: system-ui;
+  font-family: var(--font-paragraph-family);
   font-weight: normal;
-  font-size: var(--font-size-small);
+  font-size: var(--font-paragraph-size);
 }
 
 
@@ -1461,7 +1462,7 @@ h5 {
 }
 
 p {
-  font-size: var(--font-size-small);
+  /*font-size: var(--font-size-small);*/
   margin-bottom: 0;
   /* padding: 0; */
   line-height: 1.2;
