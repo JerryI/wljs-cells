@@ -1644,7 +1644,7 @@ position: absolute;
 left: -50%;
 height: 4px;
 width: 40%;
-background-color: rgb(226, 226, 226);
+background-color: var(--loader-line-color);
 -webkit-animation: lineAnim 1s linear infinite;
 -moz-animation: lineAnim 1s linear infinite;
 animation: lineAnim 1s linear infinite;

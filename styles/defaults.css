@@ -10,6 +10,8 @@
     --sidebar-background: transparent;
     --buttons-hover-inverted: rgb(255 206 59 / 53%);
     --background-menu: rgb(249 249 249 / 90%);
+
+    --loader-line-color: background-color: rgb(255 206 59 / 53%);
   
     --font-size-small: small;
     --font-size-medium: medium;
