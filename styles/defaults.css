@@ -12,6 +12,8 @@
     --background-menu: rgb(249 249 249 / 90%);
 
     --loader-line-color: rgb(255 206 59 / 53%);
+
+    --cell-separator-height: 0.8em;
   
     --font-size-small: small;
     --font-size-medium: medium;
