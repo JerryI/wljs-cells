@@ -1176,9 +1176,9 @@ code, pre, .cm-editor .cm-scroller {
 .tool-wrapper {
   display: flex;
   left: 0;
-  opacity: 0;
+  opacity: 0; 
   position: absolute;
-  bottom: 2.5px;
+  bottom: 0.4em;
   transition: opacity .18s cubic-bezier(.4, 0, .2, 1);
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1830,7 +1830,7 @@ table {
   right: 0;
   /*! display: block; */
   position: absolute;
-  margin-top: 2px;
+  /* margin-top: 2px; */
 }
 
 .cell-wrapper.frontend-node hr{
