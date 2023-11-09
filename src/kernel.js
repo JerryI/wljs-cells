@@ -58,7 +58,6 @@ function __emptyFalse(a) {
   }
   }
   
-  const newCellEvent = new CustomEvent("newCellCreated", { reference: elem.cell });
   
   class CellWrapper {
     uid = ''
@@ -384,6 +383,8 @@ function __emptyFalse(a) {
         currentCell = self;
       });
 
+      
+      const newCellEvent = new CustomEvent("newCellCreated", { reference: self });
       this.element.dispatchEvent(newCellEvent);
       
       return this;

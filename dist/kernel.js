@@ -6717,7 +6717,6 @@ Inflate$1.prototype.onEnd = function (status) {
   }
   }
   
-  const newCellEvent = new CustomEvent("newCellCreated", { reference: elem.cell });
   
   class CellWrapper {
     uid = ''
@@ -7043,6 +7042,8 @@ Inflate$1.prototype.onEnd = function (status) {
         currentCell = self;
       });
 
+      
+      const newCellEvent = new CustomEvent("newCellCreated", { reference: self });
       this.element.dispatchEvent(newCellEvent);
       
       return this;
