@@ -6743,6 +6743,26 @@ Inflate$1.prototype.onEnd = function (status) {
         CellHash.get(CellList[this.sign][pos - 1]).display?.editor?.focus();
       }
     }  
+
+    findPrev() {
+      console.log('prev');
+      const pos = CellList[this.sign].indexOf(this.uid);
+      if (pos - 1 >= 0) {
+        return CellHash.get(CellList[this.sign][pos - 1])
+      }  
+      
+      return undefined
+    }
+
+    findNext() {
+      console.log('next');
+      const pos = CellList[this.sign].indexOf(this.uid);
+      if (pos + 1 < CellList[this.sign].length) {
+        return CellHash.get(CellList[this.sign][pos + 1]);
+      }
+      
+      return undefined
+    }    
   
     morph(template, input) {
       this.type = 'input';
