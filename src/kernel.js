@@ -385,7 +385,7 @@ function __emptyFalse(a) {
 
       
       const newCellEvent = new CustomEvent("newCellCreated", { reference: self });
-      this.element.dispatchEvent(newCellEvent);
+      window.dispatchEvent(newCellEvent);
       
       return this;
     }
