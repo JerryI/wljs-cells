@@ -7043,8 +7043,8 @@ Inflate$1.prototype.onEnd = function (status) {
       });
 
       
-      const newCellEvent = new CustomEvent("newCellCreated", { reference: self });
-      this.element.dispatchEvent(newCellEvent);
+      const newCellEvent = new CustomEvent("newCellCreated", { detail: self });
+      window.dispatchEvent(newCellEvent);
       
       return this;
     }
