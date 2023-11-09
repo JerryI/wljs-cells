@@ -6717,6 +6717,7 @@ Inflate$1.prototype.onEnd = function (status) {
   }
   }
   
+  const newCellEvent = new CustomEvent("newCellCreated", { reference: elem.cell });
   
   class CellWrapper {
     uid = ''
@@ -7028,6 +7029,8 @@ Inflate$1.prototype.onEnd = function (status) {
       CellHash.add(this);
   
       this.element = document.getElementById(this.uid+"---"+this.type);
+      this.element.cell = this;
+
       if (this.type === 'input') this.toolbox();
       
       this.horisontalToolbox();
@@ -7039,6 +7042,8 @@ Inflate$1.prototype.onEnd = function (status) {
         server.socket.send(`NotebookSelectCell["${self.uid}"]`);
         currentCell = self;
       });
+
+      this.element.dispatchEvent(newCellEvent);
       
       return this;
     }

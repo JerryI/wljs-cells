@@ -58,6 +58,7 @@ function __emptyFalse(a) {
   }
   }
   
+  const newCellEvent = new CustomEvent("newCellCreated", { reference: elem.cell });
   
   class CellWrapper {
     uid = ''
@@ -369,6 +370,8 @@ function __emptyFalse(a) {
       CellHash.add(this);
   
       this.element = document.getElementById(this.uid+"---"+this.type);
+      this.element.cell = this;
+
       if (this.type === 'input') this.toolbox();
       
       this.horisontalToolbox();
@@ -380,6 +383,8 @@ function __emptyFalse(a) {
         server.socket.send(`NotebookSelectCell["${self.uid}"]`);
         currentCell = self;
       });
+
+      this.element.dispatchEvent(newCellEvent);
       
       return this;
     }
