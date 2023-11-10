@@ -6762,7 +6762,7 @@ Inflate$1.prototype.onEnd = function (status) {
       }
       
       return undefined
-    }    
+    }      
   
     morph(template, input) {
       this.type = 'input';
@@ -6962,12 +6962,18 @@ Inflate$1.prototype.onEnd = function (status) {
   
       server.socket.send(q);  
     }    
+
+    setProperty(name, value) {
+      server.socket.send(`CellObj["${this.uid}"]["props"] = Join[CellObj["${this.uid}"]["props"], <|"${name}"->${value}|>]`);
+      this.props[name] = value;
+    }
     
     constructor(template, input) {
       this.uid = input["id"];
       this.type = input["type"];
       this.state = input["state"];
       this.sign = input["sign"];
+      this.props = input["props"];
   
       if (!(this.sign in CellList)) CellList[this.sign] = [];
   

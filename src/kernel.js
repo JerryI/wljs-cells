@@ -303,12 +303,18 @@ function __emptyFalse(a) {
   
       server.socket.send(q);  
     }    
+
+    setProperty(name, value) {
+      server.socket.send(`CellObj["${this.uid}"]["props"] = Join[CellObj["${this.uid}"]["props"], <|"${name}"->${value}|>]`);
+      this.props[name] = value;
+    }
     
     constructor(template, input) {
       this.uid = input["id"];
       this.type = input["type"];
       this.state = input["state"];
       this.sign = input["sign"];
+      this.props = input["props"];
   
       if (!(this.sign in CellList)) CellList[this.sign] = [];
   
