@@ -54,6 +54,19 @@ function __emptyFalse(a) {
         if (id === 'HLC') {
           currentCell.hideNext();       
         }
+
+        if (id === 'UAC') {
+          //unhide all cells
+          
+          CellList[currentCell.sign].forEach((id) => {
+            const cell = CellHash.get(id);
+
+            if (cell.type === "input") 
+              cell.unhideCell(cell.uid);
+            
+          });
+
+        }        
     });
   }
   }
@@ -233,8 +246,31 @@ function __emptyFalse(a) {
       });  
     }
 
+
+    unhideCell(id) {
+      const pos = CellList[this.sign].indexOf(this.uid);
+
+
+      console.log('UNHIDE!');
+      console.log(pos);
+      if (pos < 0) {
+        console.warn('cell does not exists');
+        return;
+      }      
+      const sign = this.sign;
+
+      this.props["hidden"] = false; 
+
+      document.getElementById(this.uid+"---input").classList.remove("cell-hidden");
+      const svg = this.hideico.getElementsByTagName('svg');
+      svg[0].classList.remove("icon-hidden");
+      server.socket.send(`CellObj["${this.uid}"]["props"] = Join[CellObj["${this.uid}"]["props"], <|"hidden"->False|>]`);
+      
+    }
+
     hideCell(id) {
       const pos = CellList[this.sign].indexOf(this.uid);
+
 
       console.log('HIDE!');
       console.log(pos);
@@ -253,6 +289,13 @@ function __emptyFalse(a) {
         alert('The are no output cells can be hidden');
         return;
       }
+
+      if (! (this.props["hidden"])) {
+        this.props["hidden"] = true; 
+      } else {
+        this.props["hidden"] = false; 
+      }
+
       document.getElementById(this.uid+"---input").classList.toggle("cell-hidden");
       const svg = this.hideico.getElementsByTagName('svg');
       svg[0].classList.toggle("icon-hidden");
