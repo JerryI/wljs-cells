@@ -490,7 +490,7 @@ function __emptyFalse(a) {
 
     evalString(string) {
       const signature = this.sign;
-      return server.askKernel(`Module[{result}, WolframEvaluator["${string}", False, "${signature}"][(result = #1)&]; result]`);
+      return server.askKernel(`Module[{result}, WolframEvaluator["${string}", False, "${signature}", Null][(result = #1)&]; result]`);
     }
     
     eval(content) {
