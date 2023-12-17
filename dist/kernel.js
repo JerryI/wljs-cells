@@ -6703,12 +6703,17 @@ Inflate$1.prototype.onEnd = function (status) {
 
         if (id === 'HC') {
             
-          currentCell.hideCell();           
+          currentCell.toggleCell();           
         }
 
         if (id === 'HUC') {
           currentCell.hidePrev();       
-        }    
+        }  
+        
+        if (id === 'CCD') {
+          //delete current cell and jump to the next one
+          currentCell.dispose(true, focusDirection);       
+        }   
         
         if (id === 'HLC') {
           currentCell.hideNext();       
@@ -6730,7 +6735,10 @@ Inflate$1.prototype.onEnd = function (status) {
   }
   }
   
-  
+  let forceFocusNew = false;
+  let focusDirection = 1;
+
+
   class CellWrapper {
     uid = ''
     parent = false
@@ -6741,19 +6749,58 @@ Inflate$1.prototype.onEnd = function (status) {
   
     focusNext(startpoint) {
       console.log('next');
+      focusDirection = 1;
+
       const pos = CellList[this.sign].indexOf(this.uid);
       if (pos + 1 < CellList[this.sign].length) {
-        CellHash.get(CellList[this.sign][pos + 1]).display?.editor?.focus();
+        const next = CellHash.get(CellList[this.sign][pos + 1]);
+        if (next.display.editor) {
+          
+          next.focus();
+        } else {
+          //go futher
+          next.focusNext();
+        }
       } else {
         this.addCellAfter();
+      }
+    }
+
+    focus() {
+      if (!this.display.editor) return;
+
+      const self = this;
+      if (self.props["hidden"] && self.type == 'input') {
+        //temporary unhide it
+        self.toggleCell(false);
+        self.display.editor.focus();
+
+        function leftFocus() {
+          self.toggleCell(false);
+          self.element.removeEventListener('focusout', leftFocus);
+        }
+
+        self.element.addEventListener('focusout', leftFocus);            
+      } else {
+        self.display.editor.focus();
       }
     }
   
     focusPrev(startpoint) {
       console.log('prev');
+      focusDirection = -1;
+
+
       const pos = CellList[this.sign].indexOf(this.uid);
       if (pos - 1 >= 0) {
-        CellHash.get(CellList[this.sign][pos - 1]).display?.editor?.focus();
+        const prev = CellHash.get(CellList[this.sign][pos - 1]);
+        if (prev.display.editor) {
+          prev.focus();
+        } else {
+          //go futher
+          prev.focusPrev();
+        }
+        
       }
     }  
 
@@ -6799,6 +6846,22 @@ Inflate$1.prototype.onEnd = function (status) {
   
       this.toolbox();
       this.horisontalToolbox();
+
+      const self = this;
+      console.log('adding focusin listener');
+      this.element.addEventListener('focusin', ()=>{
+          server.socket.send(`NotebookSelectCell["${self.uid}"]`);
+          currentCell = self;
+          //console.warn('Focus!');
+          //console.warn(self.element);
+      });
+
+
+      if (forceFocusNew) {
+        console.warn('tried to focus');
+        forceFocusNew = false;
+        this.display?.editor?.focus();
+      }
 
       //move the rest of children
       const pos = CellList[this.sign].indexOf(this.uid);
@@ -6901,7 +6964,7 @@ Inflate$1.prototype.onEnd = function (status) {
       self.hideico = hide;
   
       hide.addEventListener("click", function (e) {
-        self.hideCell(uid);
+        self.toggleCell(uid);
       });  
     }
 
@@ -6927,7 +6990,7 @@ Inflate$1.prototype.onEnd = function (status) {
       
     }
 
-    hideCell(id) {
+    toggleCell(jump = true) {
       const pos = CellList[this.sign].indexOf(this.uid);
 
 
@@ -6940,7 +7003,7 @@ Inflate$1.prototype.onEnd = function (status) {
       const sign = this.sign;
       if (CellHash.get(CellList[this.sign][pos]).type === 'output') {
         console.log('trying to find parent cell');
-        if (pos - 1 >= 0) CellHash.get(CellList[sign][pos - 1]).hideCell();
+        if (pos - 1 >= 0) CellHash.get(CellList[sign][pos - 1]).toggleCell();
         return;
       }
 
@@ -6960,33 +7023,25 @@ Inflate$1.prototype.onEnd = function (status) {
       svg[0].classList.toggle("icon-hidden");
       server.socket.send(`CellObj["${this.uid}"]["props"] = Join[CellObj["${this.uid}"]["props"], <|"hidden"->!CellObj["${this.uid}"]["props"]["hidden"]|>]`);
       
+      //jump focus on the next cell
+      if (jump) this.focusNext();
     }
 
     hideNext(startpoint) {
-      console.log('next h');
-      const pos = CellList[this.sign].indexOf(this.uid);
-      if (pos + 1 < CellList[this.sign].length) {
-        CellHash.get(CellList[this.sign][pos + 1]).hideCell();
-      }
+      alert('feature was disabled by dev.');
     }
   
     hidePrev(startpoint) {
-      console.log('prev h');
-      const pos = CellList[this.sign].indexOf(this.uid);
-      console.log(pos);
-      if (pos - 1 >= 0) {
-        console.log('good');
-        CellHash.get(CellList[this.sign][pos - 1]).hideCell();
-      }
+      alert('feature was disabled by dev.');
     }      
     
     addCellAfter(uid) {  
       const id = uid || this.uid;
       var q = 'NotebookOperate["'+id+'", CellListAddNewAfter]';
   
-      this?.display?.forceFocusNext();
-  
       server.socket.send(q);  
+      //force focus on a new one
+      forceFocusNew = true;
     }
 
     removeOutput(uid, self = this) {  
@@ -7003,7 +7058,8 @@ Inflate$1.prototype.onEnd = function (status) {
       const id = uid || this.uid;
       var q = 'NotebookOperate["'+id+'", CellListAddNewAfterAny]';
   
-      server.socket.send(q);  
+      server.socket.send(q); 
+      forceFocusNew = true; 
     }    
 
     setProperty(name, value) {
@@ -7019,7 +7075,7 @@ Inflate$1.prototype.onEnd = function (status) {
       this.props = input["props"];
   
       if (!(this.sign in CellList)) CellList[this.sign] = [];
-  
+
   
       if ('after' in input) {
         console.log('inserting after something');
@@ -7106,14 +7162,28 @@ Inflate$1.prototype.onEnd = function (status) {
       this.display = new window.SupportedCells[input["display"]].view(this, input["data"]);  
       
       const self = this;
-      if (this.type === 'input') this.element.addEventListener('focusin', ()=>{
-        server.socket.send(`NotebookSelectCell["${self.uid}"]`);
-        currentCell = self;
-      });
+
+      if (this.type == 'input') {
+        this.element.addEventListener('focusin', ()=>{
+          server.socket.send(`NotebookSelectCell["${self.uid}"]`);
+          currentCell = self;
+          //console.warn('Focus!');
+          //console.warn(self.element);
+        });
+      }
 
       
       const newCellEvent = new CustomEvent("newCellCreated", { detail: self });
       window.dispatchEvent(newCellEvent);
+
+      //console.log('New cell');
+      //console.log(this.type);
+      //force focus flag
+      if (forceFocusNew && this.type == 'input') {
+        console.warn('focus input cell');
+        forceFocusNew = false;
+        this.display?.editor?.focus();
+      }
       
       return this;
     }
@@ -7138,8 +7208,39 @@ Inflate$1.prototype.onEnd = function (status) {
       }    
     }
     
-    remove() {
+    remove(jump = false, direction = 1) {
       server.socket.send(`NotebookOperate["${this.uid}", CellListRemoveAccurate];`);
+      if (jump) {
+        let pos = CellList[this.sign].indexOf(this.uid);
+        let current = this;
+        const origin = this;
+
+        if (direction > 0) {
+
+          while (pos + 1 < CellList[this.sign].length) {
+            current = CellHash.get(CellList[this.sign][pos + 1]);
+            pos++;
+
+            if (origin.type == 'output') {
+              current.focus();
+              break;
+            }
+
+            if (origin.type == 'input' && current.type == 'input') {
+              current.focus();
+            }
+          } 
+
+        } else {
+
+          if (pos - 1 >= 0) {
+            current = CellHash.get(CellList[this.sign][pos - 1]);
+            current.focus();
+          } 
+
+        }
+        
+      }
     }
     
     save(content) {
