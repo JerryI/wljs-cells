@@ -1,5 +1,4 @@
 
-import { deflate } from 'pako';
 
 function __emptyFalse(a) {
     if (a === '') return false;
@@ -665,30 +664,7 @@ function __emptyFalse(a) {
   
   }
 
-  core.FrontAddDefinition = async (args, env) => {
-    const data = await interpretate(args[0], env);
-    console.log(data);
-    
-    data.forEach((element)=>{
-      const name = element[0];
-      const context = element[1];
-  
-      if (!(name in core.FrontAddDefinition.symbols)) {
-        window.EditorAutocomplete.extend([  
-          {
-              "label": name,
-              "type": "keyword",
-              "info": "User's defined symbol in "+context  
-          }]);
-  
-        core.FrontAddDefinition.symbols[name] = context;
-      }
-    });
 
-
-  }
-
-  core.FrontAddDefinition.symbols = {};
   
   core.FrontEndRemoveCell = async function (args, env) {
     var input = await interpretate(args[0]);
@@ -755,17 +731,7 @@ function __emptyFalse(a) {
       setTimeout(interpretate.garbageCollect, time);
   }
 
-  core.FrontEditorSelected = async (args, env) => {
-    const op = await interpretate(args[0], env);
-    if (op == "Get")
-      return window.EditorSelected.get();
 
-    if (op == "Set") {
-      let data = await interpretate(args[1], env);
-      if (data.charAt(0) == '"') data = data.slice(1,-1);
-      window.EditorSelected.set(data);
-    }
-  }
 
   
 
