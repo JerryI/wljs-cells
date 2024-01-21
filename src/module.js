@@ -4,6 +4,36 @@ function __emptyFalse(a) {
   return a;
 }
 
+function throttle(func, ms) {
+
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
+
+  function wrapper() {
+
+    if (isThrottled) { // (2)
+      savedArgs = arguments;
+      savedThis = this;
+      return;
+    }
+
+    func.apply(this, arguments); // (1)
+
+    isThrottled = true;
+
+    setTimeout(function() {
+      isThrottled = false; // (3)
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
+      }
+    }, ms);
+  }
+
+  return wrapper;
+}
+
 //CELL TYPES / LANGUAGES
 window.SupportedCells = {};
 window.SupportedLanguages = [];
@@ -60,9 +90,17 @@ window.CellWrapper = class {
   static epilog = []
   static prolog = []
 
+  static remove = (uid, ev) => {
+    CellHash.get(uid).dispose();
+  }
+
+  static morph = (uid, template, props) => {
+    CellHash.get(uid).morph(template, props);
+  }
+
   channel;
 
-  focusNext(startpoint) {
+  focusNext(skipOutputs = false) {
     console.log('next');
     focusDirection = 1;
 
@@ -71,7 +109,7 @@ window.CellWrapper = class {
     const pos = list.indexOf(this.uid);
     if (pos + 1 < list.length) {
       const next = CellHash.get(list[pos + 1]);
-      if (next.display.editor) {
+      if (next.display.editor && (!skipOutputs || (next.type == 'Input'))) {
         
         next.focus();
       } else {
@@ -139,8 +177,8 @@ window.CellWrapper = class {
       return;
     }
 
-    const frame = document.getElementById('frame-'+this.uid);
-    frame.classList.toggle('hidden');
+    const wrapper = document.getElementById(this.uid);
+    wrapper.classList.toggle('hidden');
 
     if (!this.props["Hidden"]) {
       this.setProp('Hidden', true);
@@ -149,7 +187,7 @@ window.CellWrapper = class {
     }
 
     if (jump) this.focusNext();
-    
+    return true;
   }
 
   setProp(key, value) {
@@ -162,22 +200,37 @@ window.CellWrapper = class {
     server.emitt(this.channel, '"'+this.uid+'"', 'AddAfter');
   }
 
+  addCellBefore() {
+    server.emitt(this.channel, '"'+this.uid+'"', 'AddBefore');
+  }  
+
   findInput() {
     const self = this;
     if (this.type == 'Input') return self;
-    const list = Notebook[this.uid].Cells;
+    const list = Notebook[this.notebook].Cells;
     return CellHash.get(list[list.indexOf(self.uid)-1]).findInput();
   }
+
+  save(content) {
+    //const fixed = content.replaceAll('\\\"', '\\\\\"').replaceAll('\"', '\\"');
+    this.throttledSave(content)
+  }
   
-  constructor(template, input, list, eventid) {
+  constructor(template, input, list, eventid, meta = {}) {
 
     this.uid         = input["Hash"];
     this.channel     = eventid;
+    //this.state       = input["State"];
     this.type        = input["Type"];
     this.notebook    = input["Notebook"];
     this.props       = input["Props"];
 
-    console.log(this);
+    const oldNotebook = (Notebook[input["Notebook"]]);
+
+    let _list = [];
+    if (oldNotebook) {
+      _list = [...oldNotebook.Cells];
+    }
 
     const notebook = Notebook.add(input["Notebook"], list); 
     const pos  = notebook.Cells.indexOf(this.uid);
@@ -191,6 +244,11 @@ window.CellWrapper = class {
     CellHash.add(this);
 
     const self = this;
+
+    this.throttledSave = throttle((content) => {
+      server.emitt(self.channel, '{"'+self.uid+'","'+(content)+'"}', "UpdateCell");
+    }, 300);
+
     CellWrapper.prolog.forEach((f) => f({cell: self, props: input, event: eventid}));
 
     if (pos == 0) {
@@ -198,7 +256,9 @@ window.CellWrapper = class {
       notebook.element.insertAdjacentHTML('beforeend', template);
 
     } else {
-      let next   = notebook.Cells[pos + 1];
+      let next;
+      if (!meta["IgnoreList"]) next = notebook.Cells[pos + 1];
+    
       let parent = notebook.Cells[pos - 1];  
 
       if (next) next   = CellHash.get(  next);
@@ -210,12 +270,18 @@ window.CellWrapper = class {
 
         if (next) {
           if (next.type == "Output") {
-            const parentKids = document.getElementById('children-' + parent.uid);
+            //find all kids and move them
             const currentKids = document.getElementById('children-' + this.uid);
-            //move kids
-            for (let i=0; i<parentKids.children.length; ++i) {
-              const node = parentKids.children[i];
+            const starting = _list.indexOf(parent.uid);
+            let iterator = starting + 1;
+
+            while(iterator < _list.length) {
+              const o = CellHash.get(_list[iterator]);
+              if (o.type === 'Input') break;
+
+              const node = o.group;
               currentKids.appendChild(node);
+              iterator ++ ;
             }
           }
         } 
@@ -227,12 +293,40 @@ window.CellWrapper = class {
       } else if (parent.type == 'Output' && this.type == 'Input') {
         console.log('Insert after output input cell');
         //find input parent first
-        parent = parent.findInput();
-        document.getElementById('group-' + parent.uid).insertAdjacentHTML('afterend', template);
+        const inputparent = parent.findInput();
+
+        if (next) {
+          if (next.type == 'Input') {
+            document.getElementById('group-' + inputparent.uid).insertAdjacentHTML('afterend', template);
+          } else {
+            //the most complecated case. We need to break a chain
+            console.warn('Restructuring cells...');
+            //insert after the parent input firstly
+            document.getElementById('group-' + inputparent.uid).insertAdjacentHTML('afterend', template);
+            //now we need to move all kids starting from prev
+
+            const currentKids = document.getElementById('children-' + this.uid);
+            //move kids starting from ...
+            const starting = _list.indexOf(next.uid);
+            let iterator = starting;
+
+            while(iterator < _list.length) {
+              const o = CellHash.get(_list[iterator]);
+              if (o.type === 'Input') break;
+
+              const node = o.group;
+              currentKids.appendChild(node);
+              iterator ++ ;
+            }
+
+          }
+        } else {
+          document.getElementById('group-' + inputparent.uid).insertAdjacentHTML('afterend', template);
+        }
 
       } else if (parent.type == 'Output' && this.type == 'Output') {
         console.log('Insert after output output cell');
-        document.getElementById('children-' + parent.uid).insertAdjacentHTML('beforeend', template);
+        document.getElementById('group-' + parent.uid).insertAdjacentHTML('afterend', template);
 
       } else {
         console.error(parent);
@@ -240,7 +334,10 @@ window.CellWrapper = class {
         throw('Unexpected value!');
       }
 
+      
     }
+
+    this.group       = document.getElementById('group-' + input["Hash"]);
 
     this.element = document.getElementById(this.uid);
     this.display = new window.SupportedCells[input["Display"]].view(this, input["Data"]);  
@@ -265,89 +362,111 @@ window.CellWrapper = class {
       forceFocusNew = false;
       this.display?.editor?.focus();
     }
+
+    //setTimeout(() => self.group.classList.remove('-translate-x-6'), 50);
+    
     
     return this;
   }
+
+  morph(template, input) {
+    const notebook = Notebook[this.notebook]; 
+    const pos  = notebook.Cells.indexOf(this.uid);
+    const inputparent = this.findInput();
+
+    const self = this;
+    const eventid = this.channel;
+
+    CellWrapper.prolog.forEach((f) => f({cell: self, props: input, event: eventid, morph: true}));
+
+    const afterInputParent = document.getElementById('group-' + inputparent.uid);
+    //temporary move
+    afterInputParent.parentNode.appendChild(this.element);
+    this.element.id = this.element.id + 'temporal';
+
+    //remove original group
+    this.group.remove();
+
+    //add new template on its place
+    document.getElementById('group-' + inputparent.uid).insertAdjacentHTML('afterend', template);
+    this.group = document.getElementById('group-' + this.uid);
+
+    //insert original into a new container
+    const dummy = document.getElementById(this.uid);
+    dummy.after(this.element);
+    //remove template's version
+    dummy.remove();
+
+    //restore uid
+    this.element.id = this.uid;
+
+    //fuckmylife
+    //move kids
+
+    const currentKids = document.getElementById('children-' + this.uid);
+    //move kids starting from ...
+    const starting = notebook.Cells.indexOf(this.uid);
+    let iterator = starting + 1;
+
+    while(iterator < notebook.Cells.length) {
+      const o = CellHash.get(notebook.Cells[iterator]);
+      if (o.type === 'Input') break;
+
+      const node = o.group;
+      currentKids.appendChild(node);
+      iterator ++ ;
+    }
+
+    this.type = 'Input';
+
+    CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid, morph: true}));
+  }
+
+  eval(content) {
+    if (this.type == "Output") console.warn('Output cell cannot be evaluated, but we will try to convert it');
+
+    server.emitt(this.channel, '"'+this.uid+'"', 'Evaluate');  
+  }  
   
   dispose() {
-    //remove a single cell
+    const group = this.group;
+    group.classList.add('scale-50');
 
-    //call dispose action
-    this.display.dispose();
+    
 
     //remove from the list
-    const pos = CellList[this.sign].indexOf(this.uid);
-    CellList[this.sign].splice(pos, 1);
+    const list = Notebook[this.notebook].Cells; 
+    const pos = list.indexOf(this.uid);
+
+    list.splice(pos, 1);
     //remove hash
     CellHash.remove(this.uid);
 
     //remove dom holders
-    if (this.type === 'input') {
-      document.getElementById(this.uid).parentNode.remove();
-    } else {
-      document.getElementById(`${this.uid}---${this.type}`)?.parentNode.remove();
-    }    
+    setTimeout(() => {
+      this.display.dispose();
+      group.remove();
+    }, 100);
   }
   
-  remove(jump = false, direction = 1) {
-    server.socket.send(`NotebookOperate["${this.uid}", CellListRemoveAccurate];`);
+  remove(jump = true, direction = -1) {
+    server.emitt(this.channel, '"'+this.uid+'"', 'RemoveCell');
     if (jump) {
-      let pos = CellList[this.sign].indexOf(this.uid);
-      let current = this;
-      const origin = this;
-
-      if (direction > 0) {
-
-        while (pos + 1 < CellList[this.sign].length) {
-          current = CellHash.get(CellList[this.sign][pos + 1]);
-          pos++;
-
-          if (origin.type == 'output') {
-            current.focus();
-            break;
-          }
-
-          if (origin.type == 'input' && current.type == 'input') {
-            current.focus();
-          }
-        } 
-
+      if (this.type == 'Output') {
+        if (direction < 0) this.focusPrev(); else this.focusNext();
       } else {
-
-        if (pos - 1 >= 0) {
-          current = CellHash.get(CellList[this.sign][pos - 1]);
-          current.focus();
-        } 
-
+        if (direction < 0) {
+          this.focusPrev();
+        } else {
+          this.focusNext(true);
+        }
       }
-      
     }
-  }
-  
-  save(content) {
-    //const fixed = content.replaceAll('\\\"', '\\\\\"').replaceAll('\"', '\\"');
-    server.socket.send(`NotebookOperate["${this.uid}", CellObjSave, "${content}"];`);
   }
 
   evalString(string) {
     const signature = this.sign;
     return server.askKernel(`Module[{result}, WolframEvaluator["${string}", False, "${signature}", Null][(result = #1)&]; result]`);
   }
-  
-  eval(content) {
-    if (this.state === 'pending') {
-      alert("This cell is still under evaluation");
-      return;
-    }
 
-    //const fixed = content.replaceAll('\\\"', '\\\\\"').replaceAll('\"', '\\"');
-    const q = `NotebookEvaluate["${this.uid}"]`;
-
-    if($KernelStatus !== 'good' && $KernelStatus !== 'working') {
-      alert("No active kernel is attached");
-      return;
-    }
-
-    server.socket.send(q);    
-  }
 };;

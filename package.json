@@ -9,8 +9,6 @@
   "defaultPackage": true,
   "wljs-meta": {
     "js": "src/module.js",
-    "wl": "src/events.wl",
-    "styles": ["styles/defaults.css", "styles/ui.css"],
     "priority": -100,
     "important": true
   },
