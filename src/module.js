@@ -98,6 +98,26 @@ window.CellWrapper = class {
     CellHash.get(uid).morph(template, props);
   }
 
+  static toggleCell = (uid) => {
+    CellHash.get(uid).toggle(true);
+  }
+
+  static setInit = (uid, state) => {
+    CellHash.get(uid).setInit(state);
+  }
+
+  static unhideAll = (nid) => {
+    const list = Notebook[nid].Cells; 
+    if (!list) return;
+    
+    list.forEach((h) => {
+      const cell = CellHash.get(h);
+      if (cell.type == 'Input') {
+        cell.toggle(false);
+      }
+    });
+  }
+
   channel;
 
   focusNext(skipOutputs = false) {
@@ -224,6 +244,8 @@ window.CellWrapper = class {
     this.type        = input["Type"];
     this.notebook    = input["Notebook"];
     this.props       = input["Props"];
+
+
 
     const oldNotebook = (Notebook[input["Notebook"]]);
 
@@ -369,6 +391,15 @@ window.CellWrapper = class {
     return this;
   }
 
+  setInit(state) {
+    const icon = document.getElementById('gi-'+this.uid);
+    if (state) {
+      icon.classList.remove('hidden');
+    } else {
+      icon.classList.add('hidden');
+    }
+  }
+
   morph(template, input) {
     const notebook = Notebook[this.notebook]; 
     const pos  = notebook.Cells.indexOf(this.uid);
@@ -470,3 +501,59 @@ window.CellWrapper = class {
   }
 
 };;
+
+
+window.WindowWrapper = class {
+  uid = ''
+  element;
+  notebook = '';
+
+  channel;
+
+  focus() {
+    if (!this.display.editor) return;
+    this.display.editor.focus();
+  }
+  
+  constructor(template, input, list, eventid, meta = {}) {
+
+    this.uid         = input["Hash"];
+    this.channel     = eventid;
+    this.state       = input["State"];
+    this.type        = input["Type"];
+    this.notebook    = input["Notebook"];
+
+    const self = this;
+
+    const notebook = Notebook.add(input["Notebook"], {}); 
+
+    this.throttledSave = throttle((content) => {
+      console.warn('editing inside window is not permitted');
+    }, 300);
+
+    notebook.element.innerHTML = "";
+    notebook.element.insertAdjacentHTML('beforeend', template);
+
+    this.group       = document.getElementById('group-' + input["Hash"]);
+
+    this.element = document.getElementById(this.uid);
+    this.display = new window.SupportedCells[input["Display"]].view(this, input["Data"]);  
+
+    //if (this.type == 'Input') {
+      this.element.addEventListener('focusin', ()=>{
+        //call on cell focus event
+        server.emitt(self.uid, 'True', 'Focus');
+        currentCell = self;
+      });
+    //}
+
+    //CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid}));
+
+    //global JS event
+    const newCellEvent = new CustomEvent("newWindowCreated", { detail: self });
+    window.dispatchEvent(newCellEvent);
+
+    //setTimeout(() => self.group.classList.remove('-translate-x-6'), 50);
+    return this;
+  }
+}
