@@ -10,7 +10,8 @@
   "wljs-meta": {
     "js": "src/module.js",
     "priority": -100,
-    "important": true
+    "important": true,
+    "category": "Internal"
   },
   "repository": {
     "type": "git",
