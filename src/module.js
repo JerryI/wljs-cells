@@ -455,7 +455,6 @@ window.CellWrapper = class {
 
   eval(content) {
     if (this.type == "Output") console.warn('Output cell cannot be evaluated, but we will try to convert it');
-
     server.emitt(this.channel, '"'+this.uid+'"', 'Evaluate');  
   }  
   
@@ -529,7 +528,7 @@ window.WindowWrapper = class {
 
     this.throttledSave = throttle((content) => {
       console.warn('editing inside window is not permitted');
-    }, 300);
+    }, 150);
 
     notebook.element.innerHTML = "";
     notebook.element.insertAdjacentHTML('beforeend', template);
