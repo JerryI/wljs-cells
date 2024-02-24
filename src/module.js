@@ -494,10 +494,6 @@ window.CellWrapper = class {
     }
   }
 
-  evalString(string) {
-    const signature = this.sign;
-    return server.askKernel(`Module[{result}, WolframEvaluator["${string}", False, "${signature}", Null][(result = #1)&]; result]`);
-  }
 
 };;
 
