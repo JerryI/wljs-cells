@@ -9,6 +9,7 @@
   "defaultPackage": true,
   "wljs-meta": {
     "js": "src/module.js",
+    "minjs": "src/module.js",
     "priority": -100,
     "important": true,
     "category": "Internal"
