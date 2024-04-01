@@ -8,13 +8,11 @@
   },
   "defaultPackage": true,
   "wljs-meta": {
-    "jsmodule": [
-      "dist/kernel.js"
-    ],
-    "wl": "src/events.wl",
-    "styles": ["styles/defaults.css", "styles/ui.css"],
+    "js": "src/module.js",
+    "minjs": "src/module.js",
     "priority": -100,
-    "important": true
+    "important": true,
+    "category": "Internal"
   },
   "repository": {
     "type": "git",
