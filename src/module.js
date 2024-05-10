@@ -102,6 +102,10 @@ window.CellWrapper = class {
     CellHash.get(uid).toggle(true);
   }
 
+  static fadeCell = (uid) => {
+    CellHash.get(uid).fade(true);
+  }
+
   static setInit = (uid, state) => {
     CellHash.get(uid).setInit(state);
   }
@@ -156,7 +160,18 @@ window.CellWrapper = class {
       }
 
       self.element.addEventListener('focusout', leftFocus);            
-    } else {
+    } else if (self.props["Fade"] && self.type == 'Input') {
+      //temporary unhide it
+      self.fade(false);
+      self.display.editor.focus();
+
+      function leftFocus() {
+        self.fade(false);
+        self.element.removeEventListener('focusout', leftFocus);
+      }
+
+      self.element.addEventListener('focusout', leftFocus);       
+    } {
       self.display.editor.focus();
     }
   }
@@ -180,6 +195,18 @@ window.CellWrapper = class {
       }
       
     }
+  }
+
+  fade() {
+    if (this.type == 'Output') return;
+    const wrapper = document.getElementById(this.uid);
+    wrapper.classList.toggle('h-fade-20');
+
+    if (!this.props["Fade"]) {
+      this.setProp('Fade', true);
+    } else {
+      this.setProp('Fade', false);
+    }    
   }
   
   toggle(jump = true) {
