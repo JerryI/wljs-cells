@@ -163,10 +163,12 @@ window.CellWrapper = class {
     } else if (self.props["Fade"] && self.type == 'Input') {
       //temporary unhide it
       self.fade(false);
+      self._fade_block = true;
       self.display.editor.focus();
 
       function leftFocus() {
         self.fade(false);
+        self._fade_block = false;
         self.element.removeEventListener('focusout', leftFocus);
       }
 
@@ -395,6 +397,17 @@ window.CellWrapper = class {
       this.element.addEventListener('focusin', ()=>{
         //call on cell focus event
         server.emitt(self.uid, 'True', 'Focus');
+        if (!self._fade_block && self.props["Fade"]) {
+
+          self.fade(true);
+
+          function leftFocus() {
+            self.fade(false);
+            self.element.removeEventListener('focusout', leftFocus);
+          }
+    
+          self.element.addEventListener('focusout', leftFocus);  
+        }
         currentCell = self;
       });
     }
