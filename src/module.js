@@ -98,6 +98,10 @@ window.CellWrapper = class {
     CellHash.get(uid).morph(template, props);
   }
 
+  static setContent = (uid, content) => {
+    CellHash.get(uid).setContent(content);
+  }
+
   static toggleCell = (uid) => {
     CellHash.get(uid).toggle(true);
   }
@@ -437,6 +441,14 @@ window.CellWrapper = class {
       icon.classList.remove('hidden');
     } else {
       icon.classList.add('hidden');
+    }
+  }
+
+  setContent(content) {
+    
+    if (!this.display.editor) return;
+    if (this.display.setContent) {
+      this.display.setContent(content);
     }
   }
 
