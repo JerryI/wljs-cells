@@ -502,6 +502,12 @@ window.CellWrapper = class {
 
     this.type = 'Input';
 
+    this.element.addEventListener('focusin', ()=>{
+      //call on cell focus event
+      server.emitt(self.uid, 'True', 'Focus');
+      currentCell = self;
+    });
+
     CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid, morph: true}));
   }
 
