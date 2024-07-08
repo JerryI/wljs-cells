@@ -106,9 +106,19 @@ window.CellWrapper = class {
     CellHash.get(uid).toggle(true);
   }
 
+  static vanishCell = (uid) => {
+    CellHash.get(uid).vanish();
+  }
+
   static fadeCell = (uid) => {
     CellHash.get(uid).fade(true);
   }
+
+  static lockCell = (uid) => {
+    CellHash.get(uid).lock();
+  }  
+
+  
 
   static setInit = (uid, state) => {
     CellHash.get(uid).setInit(state);
@@ -120,7 +130,7 @@ window.CellWrapper = class {
     
     list.forEach((h) => {
       const cell = CellHash.get(h);
-      if (cell.type == 'Input') {
+      if (cell.type == 'Input' && !cell.invisible) {
         cell.toggle(false);
       }
     });
@@ -137,7 +147,7 @@ window.CellWrapper = class {
     const pos = list.indexOf(this.uid);
     if (pos + 1 < list.length) {
       const next = CellHash.get(list[pos + 1]);
-      if (next.display.editor && (!skipOutputs || (next.type == 'Input'))) {
+      if (next.display.editor && (!skipOutputs || (next.type == 'Input')) && !next.invisible && !next.props["Locked"]) {
         
         next.focus();
       } else {
@@ -193,13 +203,22 @@ window.CellWrapper = class {
 
     if (pos - 1 >= 0) {
       const prev = CellHash.get(list[pos - 1]);
-      if (prev.display.editor) {
+      if (prev.display.editor && !prev.invisible && !prev.props["Locked"]) {
         prev.focus();
       } else {
         //go futher
         prev.focusPrev();
       }
       
+    }
+  }
+
+  vanish() {
+    this.group.classList.toggle('invisible-cell');
+    if (this.invisible) {
+      this.invisible  = false;
+    } else {
+      this.invisible = true;
     }
   }
 
@@ -214,6 +233,18 @@ window.CellWrapper = class {
       this.setProp('Fade', false);
     }    
   }
+
+  lock() {
+    if (this.type == 'Output') return;
+    const wrapper = document.getElementById(this.uid);
+    wrapper.classList.toggle('blur');
+
+    if (!this.props["Locked"]) {
+      this.setProp('Locked', true);
+    } else {
+      this.setProp('Locked', false);
+    }    
+  }  
   
   toggle(jump = true) {
     if (this.type == 'Output') return;
@@ -276,6 +307,7 @@ window.CellWrapper = class {
     //this.state       = input["State"];
     this.type        = input["Type"];
     this.notebook    = input["Notebook"];
+    this.invisible   = input["Invisible"];
     this.props       = input["Props"];
 
 
