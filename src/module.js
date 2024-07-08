@@ -217,8 +217,14 @@ window.CellWrapper = class {
     this.group.classList.toggle('invisible-cell');
     if (this.invisible) {
       this.invisible  = false;
+      if (this.display.editor) {
+        this.display.readOnly(false);
+      }       
     } else {
       this.invisible = true;
+      if (this.display.editor) {
+        this.display.readOnly(true);
+      }       
     }
   }
 
@@ -241,8 +247,14 @@ window.CellWrapper = class {
 
     if (!this.props["Locked"]) {
       this.setProp('Locked', true);
+      if (this.display.editor) {
+        this.display.readOnly(true);
+      }
     } else {
       this.setProp('Locked', false);
+      if (this.display.editor) {
+        this.display.readOnly(false);
+      }      
     }    
   }  
   
@@ -309,8 +321,6 @@ window.CellWrapper = class {
     this.notebook    = input["Notebook"];
     this.invisible   = input["Invisible"];
     this.props       = input["Props"];
-
-
 
     const oldNotebook = (Notebook[input["Notebook"]]);
 
@@ -428,6 +438,12 @@ window.CellWrapper = class {
 
     this.element = document.getElementById(this.uid);
     this.display = new window.SupportedCells[input["Display"]].view(this, input["Data"]);  
+
+    if (this.props["Locked"] || this.invisible) {
+      if (this.display.editor) {
+        this.display.readOnly(true);
+      } 
+    } 
 
     if (this.type == 'Input') {
       this.element.addEventListener('focusin', ()=>{
