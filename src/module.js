@@ -439,6 +439,13 @@ window.CellWrapper = class {
     this.element = document.getElementById(this.uid);
     this.display = new window.SupportedCells[input["Display"]].view(this, input["Data"]);  
 
+    if (!notebook.focusedFirst && meta["FocusFirst"]) {
+      if (this.type == 'Input' && this.display.editor && !(this.props["Locked"] || this.invisible || this.props["Hidden"])) {
+        notebook.focusedFirst = true;
+        this.display.editor.focus();
+      }
+    }
+
     if (this.props["Locked"] || this.invisible) {
       if (this.display.editor) {
         this.display.readOnly(true);
