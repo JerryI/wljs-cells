@@ -564,6 +564,7 @@ window.CellWrapper = class {
     });
 
     CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid, morph: true}));
+    self.display.editor.focus();
   }
 
   eval(content) {
