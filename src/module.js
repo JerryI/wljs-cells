@@ -98,9 +98,27 @@ window.CellWrapper = class {
     CellHash.get(uid).morph(template, props);
   }
 
+  static setContent = (uid, content) => {
+    CellHash.get(uid).setContent(content);
+  }
+
   static toggleCell = (uid) => {
     CellHash.get(uid).toggle(true);
   }
+
+  static vanishCell = (uid) => {
+    CellHash.get(uid).vanish();
+  }
+
+  static fadeCell = (uid) => {
+    CellHash.get(uid).fade(true);
+  }
+
+  static lockCell = (uid) => {
+    CellHash.get(uid).lock();
+  }  
+
+  
 
   static setInit = (uid, state) => {
     CellHash.get(uid).setInit(state);
@@ -112,7 +130,7 @@ window.CellWrapper = class {
     
     list.forEach((h) => {
       const cell = CellHash.get(h);
-      if (cell.type == 'Input') {
+      if (cell.type == 'Input' && !cell.invisible) {
         cell.toggle(false);
       }
     });
@@ -129,7 +147,7 @@ window.CellWrapper = class {
     const pos = list.indexOf(this.uid);
     if (pos + 1 < list.length) {
       const next = CellHash.get(list[pos + 1]);
-      if (next.display.editor && (!skipOutputs || (next.type == 'Input'))) {
+      if (next.display.editor && (!skipOutputs || (next.type == 'Input')) && !next.invisible && !next.props["Locked"]) {
         
         next.focus();
       } else {
@@ -156,7 +174,20 @@ window.CellWrapper = class {
       }
 
       self.element.addEventListener('focusout', leftFocus);            
-    } else {
+    } else if (self.props["Fade"] && self.type == 'Input') {
+      //temporary unhide it
+      self.fade(false);
+      self._fade_block = true;
+      self.display.editor.focus();
+
+      function leftFocus() {
+        self.fade(false);
+        self._fade_block = false;
+        self.element.removeEventListener('focusout', leftFocus);
+      }
+
+      self.element.addEventListener('focusout', leftFocus);       
+    } {
       self.display.editor.focus();
     }
   }
@@ -172,7 +203,7 @@ window.CellWrapper = class {
 
     if (pos - 1 >= 0) {
       const prev = CellHash.get(list[pos - 1]);
-      if (prev.display.editor) {
+      if (prev.display.editor && !prev.invisible && !prev.props["Locked"]) {
         prev.focus();
       } else {
         //go futher
@@ -181,6 +212,51 @@ window.CellWrapper = class {
       
     }
   }
+
+  vanish() {
+    this.group.classList.toggle('invisible-cell');
+    if (this.invisible) {
+      this.invisible  = false;
+      if (this.display.editor) {
+        this.display.readOnly(false);
+      }       
+    } else {
+      this.invisible = true;
+      if (this.display.editor) {
+        this.display.readOnly(true);
+      }       
+    }
+  }
+
+  fade() {
+    if (this.type == 'Output') return;
+    const wrapper = document.getElementById(this.uid);
+    wrapper.classList.toggle('h-fade-20');
+
+    if (!this.props["Fade"]) {
+      this.setProp('Fade', true);
+    } else {
+      this.setProp('Fade', false);
+    }    
+  }
+
+  lock() {
+    if (this.type == 'Output') return;
+    const wrapper = document.getElementById(this.uid);
+    wrapper.classList.toggle('blur');
+
+    if (!this.props["Locked"]) {
+      this.setProp('Locked', true);
+      if (this.display.editor) {
+        this.display.readOnly(true);
+      }
+    } else {
+      this.setProp('Locked', false);
+      if (this.display.editor) {
+        this.display.readOnly(false);
+      }      
+    }    
+  }  
   
   toggle(jump = true) {
     if (this.type == 'Output') return;
@@ -243,9 +319,8 @@ window.CellWrapper = class {
     //this.state       = input["State"];
     this.type        = input["Type"];
     this.notebook    = input["Notebook"];
+    this.invisible   = input["Invisible"];
     this.props       = input["Props"];
-
-
 
     const oldNotebook = (Notebook[input["Notebook"]]);
 
@@ -364,10 +439,34 @@ window.CellWrapper = class {
     this.element = document.getElementById(this.uid);
     this.display = new window.SupportedCells[input["Display"]].view(this, input["Data"]);  
 
+    if (!notebook.focusedFirst && meta["FocusFirst"]) {
+      if (this.type == 'Input' && this.display.editor && !(this.props["Locked"] || this.invisible || this.props["Hidden"])) {
+        notebook.focusedFirst = true;
+        this.display.editor.focus();
+      }
+    }
+
+    if (this.props["Locked"] || this.invisible) {
+      if (this.display.editor) {
+        this.display.readOnly(true);
+      } 
+    } 
+
     if (this.type == 'Input') {
       this.element.addEventListener('focusin', ()=>{
         //call on cell focus event
         server.emitt(self.uid, 'True', 'Focus');
+        if (!self._fade_block && self.props["Fade"]) {
+
+          self.fade(true);
+
+          function leftFocus() {
+            self.fade(false);
+            self.element.removeEventListener('focusout', leftFocus);
+          }
+    
+          self.element.addEventListener('focusout', leftFocus);  
+        }
         currentCell = self;
       });
     }
@@ -397,6 +496,14 @@ window.CellWrapper = class {
       icon.classList.remove('hidden');
     } else {
       icon.classList.add('hidden');
+    }
+  }
+
+  setContent(content) {
+    
+    if (!this.display.editor) return;
+    if (this.display.setContent) {
+      this.display.setContent(content);
     }
   }
 
@@ -450,7 +557,14 @@ window.CellWrapper = class {
 
     this.type = 'Input';
 
+    this.element.addEventListener('focusin', ()=>{
+      //call on cell focus event
+      server.emitt(self.uid, 'True', 'Focus');
+      currentCell = self;
+    });
+
     CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid, morph: true}));
+    self.display.editor.focus();
   }
 
   eval(content) {
