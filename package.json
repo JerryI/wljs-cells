@@ -12,7 +12,8 @@
     "minjs": "src/module.js",
     "priority": -100,
     "important": true,
-    "category": "Internal"
+    "category": "Internal",
+    "cellExportRequired": true
   },
   "repository": {
     "type": "git",
