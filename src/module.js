@@ -140,6 +140,7 @@ window.CellWrapper = class {
 
   focusNext(skipOutputs = false) {
     console.log('next');
+    console.log('skip outputs?: ', skipOutputs);
     focusDirection = 1;
 
     const list = Notebook[this.notebook].Cells; 
@@ -147,9 +148,10 @@ window.CellWrapper = class {
     const pos = list.indexOf(this.uid);
     if (pos + 1 < list.length) {
       const next = CellHash.get(list[pos + 1]);
+      console.log([next.display.editor, (!skipOutputs || (next.type == 'Input')), !next.invisible, !next.props["Locked"]]);
       if (next.display.editor && (!skipOutputs || (next.type == 'Input')) && !next.invisible && !next.props["Locked"]) {
         
-        next.focus();
+        next.focus(1);
       } else {
         //go futher
         next.focusNext();
@@ -159,14 +161,14 @@ window.CellWrapper = class {
     }
   }
 
-  focus() {
+  focus(dir) {
     if (!this.display.editor) return;
 
     const self = this;
     if (self.props["Hidden"] && self.type == 'Input') {
       //temporary unhide it
       self.toggle(false);
-      self.display.editor.focus();
+      self.display.focus(dir);
 
       function leftFocus() {
         self.toggle(false);
@@ -178,7 +180,7 @@ window.CellWrapper = class {
       //temporary unhide it
       self.fade(false);
       self._fade_block = true;
-      self.display.editor.focus();
+      self.display.focus(dir);
 
       function leftFocus() {
         self.fade(false);
@@ -188,7 +190,7 @@ window.CellWrapper = class {
 
       self.element.addEventListener('focusout', leftFocus);       
     } {
-      self.display.editor.focus();
+      self.display.focus(dir);
     }
   }
 
@@ -204,7 +206,7 @@ window.CellWrapper = class {
     if (pos - 1 >= 0) {
       const prev = CellHash.get(list[pos - 1]);
       if (prev.display.editor && !prev.invisible && !prev.props["Locked"]) {
-        prev.focus();
+        prev.focus(-1);
       } else {
         //go futher
         prev.focusPrev();
@@ -283,21 +285,39 @@ window.CellWrapper = class {
     }
 
     if (jump) this.focusNext();
+
     return true;
+  }
+
+  //private
+  _listeners = {}
+
+  _event(type, data) {
+    if (this._listeners[type])
+      this._listeners[type].forEach((el) => el(data));
+  }
+  //end of private
+
+  addEventListener(type, handler) {
+    if (!Array.isArray(this._listeners[type])) this._listeners[type] = [];
+    this._listeners[type].push(handler);
   }
 
   setProp(key, value) {
     this.props[key] = value;
     const uid = this.uid;
     server.emitt(this.channel, '"'+JSON.stringify({Cell: uid, Key: key, Value: value}).replace(/"/gm, "\\\"")+'"', "SetProperty");
+    this._event('property', {key: key, value: value, self:this});
   }
 
   addCellAfter() {
     server.emitt(this.channel, '"'+this.uid+'"', 'AddAfter');
+    this._event('addafter', {uid: this.uid, self:this});
   }
 
   addCellBefore() {
     server.emitt(this.channel, '"'+this.uid+'"', 'AddBefore');
+    this._event('addbefore', {uid: this.uid, self:this});
   }  
 
   findInput() {
@@ -309,7 +329,8 @@ window.CellWrapper = class {
 
   save(content) {
     //const fixed = content.replaceAll('\\\"', '\\\\\"').replaceAll('\"', '\\"');
-    this.throttledSave(content)
+    this.throttledSave(content);
+    this._event('saved', {uid: this.uid, self:this});
   }
   
   constructor(template, input, list, eventid, meta = {}) {
@@ -472,10 +493,8 @@ window.CellWrapper = class {
     }
 
     CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid}));
+    this._event('epilog', {self:this});
 
-    //global JS event
-    const newCellEvent = new CustomEvent("newCellCreated", { detail: self });
-    window.dispatchEvent(newCellEvent);
 
     //force focus flag
     if (forceFocusNew && this.type == 'Input') {
@@ -504,6 +523,7 @@ window.CellWrapper = class {
     if (!this.display.editor) return;
     if (this.display.setContent) {
       this.display.setContent(content);
+      this._event('contentmutate', {self:this});
     }
   }
 
@@ -565,14 +585,17 @@ window.CellWrapper = class {
 
     CellWrapper.epilog.forEach((f) => f({cell: self, props: input, event: eventid, morph: true}));
     self.display.editor.focus();
+    this._event('morph', {self:this});
   }
 
   eval(content) {
     if (this.type == "Output") console.warn('Output cell cannot be evaluated, but we will try to convert it');
     server.emitt(this.channel, '"'+this.uid+'"', 'Evaluate');  
+    this._event('eval', {self:this});
   }  
   
   dispose() {
+    this._event('beforedispose', {self:this});
     const group = this.group;
     group.classList.add('scale-50');
 
@@ -590,6 +613,7 @@ window.CellWrapper = class {
     setTimeout(() => {
       this.display.dispose();
       group.remove();
+      this._event('afterdispose', {self:this});
     }, 100);
   }
   
